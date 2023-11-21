@@ -1,0 +1,44 @@
+using System;
+using UnityEngine;
+
+public class CardBehaviour : MonoBehaviour
+{
+    public int CardId { get; private set; }
+    public string CardName { get; private set; }
+    public string CardBalance { get; private set; }
+    public string CardCurrency { get; private set; }
+
+    public event EventHandler OnCardInfoSet;
+    public event EventHandler OnCardBalanceUpdate;
+
+    private void Awake()
+    {
+        CardId = 0;
+
+        CardName = PlayerPrefs.GetString("CardName0", "Картка Універсальна");
+        CardBalance = PlayerPrefs.GetString("CardBalance0", "0.00");
+        CardCurrency = PlayerPrefs.GetString("CardCurrency0", "$");
+
+        Card.OnCardCreate += Card_OnCardCreate;
+        SpendingMenu.instance.OnBalanceUpdate += SpendingMenu_OnBalanceUpdate;
+    }
+
+    private void SpendingMenu_OnBalanceUpdate(object sender, EventArgs e)
+    {
+        CardBalance = Card.CardList[CardId][1];
+
+        OnCardBalanceUpdate?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Card_OnCardCreate(object sender, EventArgs e)
+    {
+        if(Card.CardList.Count > 0)
+        {
+            CardName = Card.CardList[CardId][0];
+            CardBalance = Card.CardList[CardId][1];
+            CardCurrency = Card.CardList[CardId][2];
+
+            OnCardInfoSet?.Invoke(this, EventArgs.Empty);
+        }
+    }
+}
