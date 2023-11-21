@@ -9993,6 +9993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDateText: {fileID: 1284765067}
+  totalBalanceText: {fileID: 408121405}
   NewCardMenu: {fileID: 1811924305}
 --- !u!1 &1222697320
 GameObject:

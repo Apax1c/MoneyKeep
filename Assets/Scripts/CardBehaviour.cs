@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class CardBehaviour : MonoBehaviour
 {
+    // Card variables
     public int CardId { get; private set; }
     public string CardName { get; private set; }
     public string CardBalance { get; private set; }
     public string CardCurrency { get; private set; }
 
+    // Events
     public event EventHandler OnCardInfoSet;
     public event EventHandler OnCardBalanceUpdate;
 
@@ -15,10 +17,12 @@ public class CardBehaviour : MonoBehaviour
     {
         CardId = 0;
 
+        // Set info of Main card
         CardName = PlayerPrefs.GetString("CardName0", "Картка Універсальна");
         CardBalance = PlayerPrefs.GetString("CardBalance0", "0.00");
         CardCurrency = PlayerPrefs.GetString("CardCurrency0", "$");
 
+        // Attach events (creating of new card and succesful spending)
         Card.OnCardCreate += Card_OnCardCreate;
         SpendingMenu.instance.OnBalanceUpdate += SpendingMenu_OnBalanceUpdate;
     }
@@ -32,6 +36,7 @@ public class CardBehaviour : MonoBehaviour
 
     private void Card_OnCardCreate(object sender, EventArgs e)
     {
+        // If card is first it sets on th main card
         if(Card.CardList.Count > 0)
         {
             CardName = Card.CardList[CardId][0];
@@ -40,5 +45,11 @@ public class CardBehaviour : MonoBehaviour
 
             OnCardInfoSet?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    private void OnDestroy()
+    {
+        Card.OnCardCreate -= Card_OnCardCreate;
+        SpendingMenu.instance.OnBalanceUpdate -= SpendingMenu_OnBalanceUpdate;
     }
 }

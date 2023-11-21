@@ -78,6 +78,11 @@ public class SpendingMenu : MonoBehaviour
 
     public void NewMathOperand(string newOperand)
     {
+        if (InputText.text == "0" || InputText.text == string.Empty)
+        {
+            return;
+        }
+
         if (InputText.text.EndsWith("+") || InputText.text.EndsWith("-") || InputText.text.EndsWith("*") || InputText.text.EndsWith("/"))
         {
             InputText.text = InputText.text.Remove(InputText.text.Length - 1, 1);
