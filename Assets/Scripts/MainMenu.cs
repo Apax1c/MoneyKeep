@@ -45,7 +45,6 @@ public class MainMenu : MonoBehaviour
 
         foreach (string[] card in Card.CardList)
         {
-            Debug.Log(float.Parse(card[balanceIdInList].Replace(".", ",")));
             totalBalance += float.Parse(card[balanceIdInList].Replace(".", ","));
         }
 

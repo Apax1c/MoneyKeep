@@ -10,8 +10,8 @@ public class SpendingMenu : MonoBehaviour
 
     private Animator spendingsMenuAnimator;
 
-    [SerializeField] private Animator spendingButtonAnimator;
     private const string IS_MENU_TOGGLED = "isMenuToggled";
+    [SerializeField] private Animator spendingButtonAnimator;
 
     [SerializeField] private GameObject MainMenuBlackoutGO;
     [SerializeField] private Animator MainMenuBlackoutAnimator;
@@ -25,10 +25,14 @@ public class SpendingMenu : MonoBehaviour
     [SerializeField] Sprite test;
 
     [Header("Choose Card Texts")]
-    private int ChooseCardId;
+    private int chooseCardId;
     [SerializeField] private TextMeshProUGUI ChooseCardName;
     [SerializeField] private TextMeshProUGUI ChooseCardBalance;
     [SerializeField] private TextMeshProUGUI ChooseCardCurrency;
+
+    [Header("Choose Card Menu")]
+    [SerializeField] private GameObject CardChooseMenuGO;
+    private CardChooseMenu cardChooseMenuScript;
 
     private bool isMenuToggled = false;
 
@@ -44,6 +48,8 @@ public class SpendingMenu : MonoBehaviour
     private void Start()
     {
         this.gameObject.SetActive(false);
+        chooseCardId = 0;
+        cardChooseMenuScript = CardChooseMenu.instance;
     }
 
     public void ToggleSpendingsMenu()
@@ -58,10 +64,7 @@ public class SpendingMenu : MonoBehaviour
             InputText.text = "0";
         }
 
-        ChooseCardId = 0;
-        ChooseCardName.text = PlayerPrefs.GetString("CardName0", "Картка Універсальна");
-        ChooseCardBalance.text = PlayerPrefs.GetString("CardBalance0", "0.00");
-        ChooseCardCurrency.text = PlayerPrefs.GetString("CardCurrency0", "$");
+        UpdateChoosenCardInfo();
     }
 
     public void NewNumber(string numberValue)
@@ -136,14 +139,21 @@ public class SpendingMenu : MonoBehaviour
     private void UpdateCardBalance()
     {
         Card.LoadCardList();
-        float cardBalanceFloat = PlayerPrefs.GetFloat(Card.CARD_BALANCE_FLOAT + ChooseCardId, 0f) - float.Parse(InputText.text.Replace('.', ','));
+        float cardBalanceFloat = PlayerPrefs.GetFloat(Card.CARD_BALANCE_FLOAT + chooseCardId, 0f) - float.Parse(InputText.text.Replace('.', ','));
         string cardBalanceText = cardBalanceFloat.ToString();
 
-        Card.CardList[ChooseCardId][1] = cardBalanceText.Replace(',', '.');
-        PlayerPrefs.SetString(Card.CARD_BALANCE + ChooseCardId, Card.CardList[ChooseCardId][1]);
-        PlayerPrefs.SetFloat(Card.CARD_BALANCE_FLOAT + ChooseCardId, cardBalanceFloat);
+        Card.CardList[chooseCardId][1] = cardBalanceText.Replace(',', '.');
+        PlayerPrefs.SetString(Card.CARD_BALANCE + chooseCardId, Card.CardList[chooseCardId][1]);
+        PlayerPrefs.SetFloat(Card.CARD_BALANCE_FLOAT + chooseCardId, cardBalanceFloat);
 
         OnBalanceUpdate?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void UpdateChoosenCardInfo()
+    {
+        ChooseCardName.text = PlayerPrefs.GetString(Card.CARD_NAME + chooseCardId.ToString(), "Картка Універсальна");
+        ChooseCardBalance.text = PlayerPrefs.GetString(Card.CARD_BALANCE + chooseCardId.ToString(), "0.00");
+        ChooseCardCurrency.text = PlayerPrefs.GetString(Card.CARD_CURRENCY + chooseCardId.ToString(), "$");
     }
 
     private void CreateNewHistoryItem()
@@ -167,5 +177,17 @@ public class SpendingMenu : MonoBehaviour
         newItem.TransactionHistory("Test", ChooseCardName.text, "-" + InputText.text, test);
 
         ToggleSpendingsMenu();
+    }
+
+    public void OpenCardChooseMenu()
+    {
+        CardChooseMenuGO.SetActive(true);
+        cardChooseMenuScript.OpenMenu();
+    }
+
+    public void UpdateCardId(int newChooseCardId)
+    {
+        chooseCardId = newChooseCardId;
+        UpdateChoosenCardInfo();
     }
 }
