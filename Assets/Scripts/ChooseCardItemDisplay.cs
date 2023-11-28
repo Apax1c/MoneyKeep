@@ -35,7 +35,7 @@ public class ChooseCardItemDisplay : MonoBehaviour
         SetCardInfo();
     }
 
-    private void OnMouseUpAsButton()
+    public void ChooseCardId()
     {
         cardChooseMenuScript.SetCardId(cardId);
     }
