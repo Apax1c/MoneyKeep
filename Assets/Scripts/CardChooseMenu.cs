@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class CardChooseMenu : MonoBehaviour
 {
+    // Singleton
     public static CardChooseMenu instance;
 
+    // GameObjects
     [SerializeField] private GameObject ChooseCardItemPrefab;
     [SerializeField] private GameObject contentGO;
 
+    private SpendingMenu spendingsMenuScript;
 
     private Animator chooseCardAnimator;
 
@@ -16,6 +19,7 @@ public class CardChooseMenu : MonoBehaviour
     // Variables
     private float contentItemsHeight = 0;
     private bool isMenuToggled = false;
+    public int choosedCardId { get; private set; }
 
     private void Awake()
     {
@@ -24,6 +28,9 @@ public class CardChooseMenu : MonoBehaviour
 
     private void Start()
     {
+        spendingsMenuScript = SpendingMenu.instance;
+        choosedCardId = 0;
+
         chooseCardAnimator = GetComponent<Animator>();
         LoadChooseCardItems();
         gameObject.SetActive(false);
@@ -39,7 +46,6 @@ public class CardChooseMenu : MonoBehaviour
             {
                 if (contentGO.transform.GetChild(i).gameObject != null)
                 {
-                    Debug.Log("Test");
                     Destroy(contentGO.transform.GetChild(i).gameObject);
                 }
             }
@@ -54,17 +60,28 @@ public class CardChooseMenu : MonoBehaviour
         UpdateContentSize();
     }
 
+    public void SetCardId(int newCardId)
+    {
+        choosedCardId = newCardId;
+    }
+
+    public void ConfirmCard()
+    {
+        spendingsMenuScript.UpdateCardId(choosedCardId);
+        CloseMenu();
+    }
+
     public void OpenMenu()
     {
         isMenuToggled = true;
-        chooseCardAnimator.SetBool(IS_MENU_TOGGLED, true);
+        chooseCardAnimator.SetBool(IS_MENU_TOGGLED, isMenuToggled);
         LoadChooseCardItems();
     }
 
     public void CloseMenu()
     {
         isMenuToggled = false;
-        chooseCardAnimator.SetBool(IS_MENU_TOGGLED, false);
+        chooseCardAnimator.SetBool(IS_MENU_TOGGLED, isMenuToggled);
     }
 
     private void UpdateContentSize()

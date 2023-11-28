@@ -6,15 +6,27 @@ public class ChooseCardItemDisplay : MonoBehaviour
     [SerializeField] private TextMeshProUGUI cardNameText;
     [SerializeField] private TextMeshProUGUI cardBalanceText;
 
+    [SerializeField] private GameObject cardFrame;
+
     private CardChooseMenu cardChooseMenuScript;
-    private SpendingMenu spendingsMenuScript;
 
     private int cardId;
 
     private void Start()
     {
-        spendingsMenuScript = SpendingMenu.instance;
         cardChooseMenuScript = CardChooseMenu.instance;
+    }
+
+    private void Update()
+    {
+        if (cardChooseMenuScript.choosedCardId == cardId)
+        {
+            cardFrame.SetActive(true);
+        }
+        else
+        {
+            cardFrame.SetActive(false);
+        }
     }
 
     public void SetCardId(int newCardId)
@@ -25,8 +37,7 @@ public class ChooseCardItemDisplay : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        spendingsMenuScript.UpdateCardId(cardId);
-        cardChooseMenuScript.CloseMenu();
+        cardChooseMenuScript.SetCardId(cardId);
     }
 
     private void SetCardInfo()
