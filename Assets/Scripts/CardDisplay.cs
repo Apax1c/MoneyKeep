@@ -7,7 +7,6 @@ public class CardDisplay : MonoBehaviour
     // TextMeshPro
     [SerializeField] private TextMeshProUGUI cardNameText;
     [SerializeField] private TextMeshProUGUI cardBalanceText;
-    [SerializeField] private TextMeshProUGUI cardCurrencyText;
 
     private void Awake()
     {
@@ -23,8 +22,7 @@ public class CardDisplay : MonoBehaviour
         // Set data of card to text components
         CardBehaviour card = GetComponent<CardBehaviour>();
         cardNameText.text = card.CardName;
-        cardBalanceText.text = card.CardBalance;
-        cardCurrencyText.text = card.CardCurrency;
+        cardBalanceText.text = "<color=#5EDEA9>" + card.CardCurrency + "</color><color=#F6F6F6>" + card.CardBalance;
     }
 
     private void CardBehaviour_OnCardBalanceUpdate(object sender, EventArgs e)
@@ -37,7 +35,6 @@ public class CardDisplay : MonoBehaviour
     {
         CardBehaviour card = GetComponent<CardBehaviour>();
         cardNameText.text = card.CardName;
-        cardBalanceText.text = card.CardBalance;
-        cardCurrencyText.text = card.CardCurrency;
+        cardBalanceText.text = "<color=#5EDEA9>" + card.CardCurrency + "</color><color=#F6F6F6>" + card.CardBalance;
     }
 }

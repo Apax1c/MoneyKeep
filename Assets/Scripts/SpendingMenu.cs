@@ -28,7 +28,6 @@ public class SpendingMenu : MonoBehaviour
     private int chooseCardId;
     [SerializeField] private TextMeshProUGUI ChooseCardName;
     [SerializeField] private TextMeshProUGUI ChooseCardBalance;
-    [SerializeField] private TextMeshProUGUI ChooseCardCurrency;
 
     [Header("Choose Card Menu")]
     [SerializeField] private GameObject CardChooseMenuGO;
@@ -152,8 +151,8 @@ public class SpendingMenu : MonoBehaviour
     private void UpdateChoosenCardInfo()
     {
         ChooseCardName.text = PlayerPrefs.GetString(Card.CARD_NAME + chooseCardId.ToString(), "Картка Універсальна");
-        ChooseCardBalance.text = PlayerPrefs.GetString(Card.CARD_BALANCE + chooseCardId.ToString(), "0.00");
-        ChooseCardCurrency.text = PlayerPrefs.GetString(Card.CARD_CURRENCY + chooseCardId.ToString(), "$");
+        ChooseCardBalance.text = "<color=#5EDEA9>" + PlayerPrefs.GetString(Card.CARD_CURRENCY + chooseCardId.ToString(), "$") + "</color>" +
+            "<color=#F6F6F6>" + PlayerPrefs.GetString(Card.CARD_BALANCE + chooseCardId.ToString(), "0.00");
     }
 
     private void CreateNewHistoryItem()
