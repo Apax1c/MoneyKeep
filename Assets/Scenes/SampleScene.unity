@@ -4189,6 +4189,7 @@ MonoBehaviour:
   MainMenuBlackoutGO: {fileID: 1964030845}
   MainMenuBlackoutAnimator: {fileID: 1964030849}
   InputText: {fileID: 477067524}
+  CurrencyText: {fileID: 1531313891}
   HistoryContent: {fileID: 133286243}
   NewTransactionHistoryPrefab: {fileID: 3914933023962291984, guid: 55b73add91609a64e9eb3e98751254b9, type: 3}
   test: {fileID: 3286163911610860551, guid: 8331c63906333504aa682de19279483e, type: 3}
