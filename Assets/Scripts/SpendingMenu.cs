@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Globalization;
 using TMPro;
+using Unity.VectorGraphics;
 using UnityEngine;
 
 public class SpendingMenu : MonoBehaviour
@@ -23,6 +24,7 @@ public class SpendingMenu : MonoBehaviour
     [SerializeField] private Transform HistoryContent;
     [SerializeField] private GameObject NewTransactionHistoryPrefab;
     [SerializeField] Sprite test;
+    private string transactionComment;
 
     [Header("Choose Card Texts")]
     private int chooseCardId;
@@ -33,8 +35,18 @@ public class SpendingMenu : MonoBehaviour
     [SerializeField] private GameObject CardChooseMenuGO;
     private CardChooseMenu cardChooseMenuScript;
 
-    private bool isMenuToggled = false;
+    [Header("Category Choose Menu")]
+    [SerializeField] private GameObject CategoryChooseMenuGO;
+    private CategoryChooseMenu categoryChooseMenuScript;
 
+    [Header("Category Preview")]
+    private int categoryId;
+    [SerializeField] private SVGImage categoryPreviewBackground;
+    [SerializeField] private SVGImage categoryPreviewIcon;
+    [SerializeField] private TextMeshProUGUI categoryPreviewName;
+
+    private bool isMenuToggled = false;
+    CategoryDataSource categoryDataSource;
     public event EventHandler OnBalanceUpdate;
 
     private void Awake()
@@ -49,6 +61,10 @@ public class SpendingMenu : MonoBehaviour
         this.gameObject.SetActive(false);
         chooseCardId = 0;
         cardChooseMenuScript = CardChooseMenu.instance;
+        categoryChooseMenuScript = CategoryChooseMenu.instance;
+
+        categoryDataSource = (CategoryDataSource)Resources.Load("CategoryDataSource");
+        UpdateCategoryId(0);
     }
 
     public void ToggleSpendingsMenu()
@@ -61,6 +77,7 @@ public class SpendingMenu : MonoBehaviour
         if (isMenuToggled)
         {
             InputText.text = "0";
+            transactionComment = string.Empty;
         }
 
         UpdateChoosenCardInfo();
@@ -112,8 +129,7 @@ public class SpendingMenu : MonoBehaviour
         // Convert the result to a float
         if (result != null)
         {
-            float floatValue;
-            if (float.TryParse(result.ToString(), out floatValue))
+            if (float.TryParse(result.ToString(), out float floatValue))
             {
                 InputText.text = floatValue.ToString();
                 InputText.text = InputText.text.Replace(",", ".");
@@ -173,7 +189,8 @@ public class SpendingMenu : MonoBehaviour
 
         GameObject newItemGO = Instantiate(NewTransactionHistoryPrefab, HistoryContent);
         TransactionHistoryItem newItem = newItemGO.GetComponent<TransactionHistoryItem>();
-        newItem.TransactionHistory("Test", ChooseCardName.text, "-" + InputText.text, test);
+        newItem.TransactionHistory(categoryDataSource.lsItems[categoryId].categoryName + transactionComment, ChooseCardName.text, "-" + InputText.text, 
+            categoryDataSource.lsItems[categoryId].categoryIcon, categoryDataSource.lsItems[categoryId].categoryColor, categoryDataSource.lsItems[categoryId].categoryIconColor);
 
         ToggleSpendingsMenu();
     }
@@ -184,9 +201,31 @@ public class SpendingMenu : MonoBehaviour
         cardChooseMenuScript.OpenMenu();
     }
 
+    public void OpenCategoryChooseMenu()
+    {
+        CategoryChooseMenuGO.SetActive(true);
+        categoryChooseMenuScript.OpenMenu();
+    }
+
     public void UpdateCardId(int newChooseCardId)
     {
         chooseCardId = newChooseCardId;
         UpdateChoosenCardInfo();
+    }
+
+    public void UpdateCategoryId(int newCategoryId, string comment = null)
+    {
+        categoryId = newCategoryId;
+        
+        categoryPreviewBackground.color = categoryDataSource.lsItems[categoryId].categoryColor;
+        categoryPreviewIcon.sprite = categoryDataSource.lsItems[categoryId].categoryIcon;
+        categoryPreviewIcon.color = categoryDataSource.lsItems[categoryId].categoryIconColor;
+        categoryPreviewName.text = categoryDataSource.lsItems[categoryId].categoryName;
+        categoryPreviewName.color = categoryDataSource.lsItems[categoryId].categoryIconColor;
+
+        if (comment != null)
+        {
+            transactionComment = ", " + comment;
+        }
     }
 }

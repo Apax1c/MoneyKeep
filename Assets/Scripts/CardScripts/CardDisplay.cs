@@ -28,7 +28,7 @@ public class CardDisplay : MonoBehaviour
     private void CardBehaviour_OnCardBalanceUpdate(object sender, EventArgs e)
     {
         CardBehaviour card = GetComponent<CardBehaviour>();
-        cardBalanceText.text = card.CardBalance;
+        cardBalanceText.text = "<color=#5EDEA9>" + card.CardCurrency + "</color><color=#F6F6F6>" + card.CardBalance;
     }
 
     private void CardBehavior_OnCardInfoSet(object sender, EventArgs e)

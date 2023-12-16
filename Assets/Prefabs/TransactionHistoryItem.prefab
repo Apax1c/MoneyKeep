@@ -200,7 +200,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: e1552449ff42faa4785c650db04e02f3, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: 94df63deea4d2754b9ce889d407ed36a, type: 3}
   m_PreserveAspect: 0
 --- !u!1 &3914933023414283896
 GameObject:
@@ -566,6 +566,7 @@ MonoBehaviour:
   transactionNameText: {fileID: 3914933023646125064}
   transactionTimeText: {fileID: 3914933023414283902}
   transactionSummText: {fileID: 3914933023023331204}
+  categoryBackground: {fileID: 3914933023256154248}
   categoryIcon: {fileID: 3914933024534598027}
 --- !u!1 &3914933024534598037
 GameObject:
