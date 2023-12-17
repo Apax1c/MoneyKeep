@@ -22,12 +22,14 @@ public class NewCardMenu : MonoBehaviour
     [Header("Preview")]
     [SerializeField] private TextMeshProUGUI CardNameText;
     [SerializeField] private TextMeshProUGUI CardBalanceText;
-    [SerializeField] private TextMeshProUGUI CardCurrencyText;
 
     [Header("Confirm Button")]
     [SerializeField] private TextMeshProUGUI ConfirmText;
     [SerializeField] private Transform ConfirmIcon;
     [SerializeField] private Button confirmButton;
+
+    private string cardCurrency;
+    private string cardBalance;
 
     private bool isNameSet = false;
     private bool isBalanceSet = true;
@@ -39,6 +41,12 @@ public class NewCardMenu : MonoBehaviour
         newCardMenuAnimator = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        cardCurrency = "$";
+        SetCardBalance(string.Empty);
+    }
+
     private void Update()
     {
         ConfirmIcon.localPosition = new Vector3((ConfirmText.preferredWidth / 2) + 12.4f - 21f + 13.3f/2, 0, 0);
@@ -47,7 +55,6 @@ public class NewCardMenu : MonoBehaviour
         NewCardBalanceInputAC.SetBool(IS_BALANCE_SET, isBalanceSet);
         NewCardPreviewAC.SetBool(IS_NAME_SET, isNameSet);
         NewCardPreviewAC.SetBool(IS_BALANCE_SET, isBalanceSet);
-
 
         if (isNameSet && isBalanceSet)
         {
@@ -73,45 +80,52 @@ public class NewCardMenu : MonoBehaviour
     public void SetCardBalance(string cardBalance)
     {
         // «амена точек на зап€тые
-        CardBalanceText.text = cardBalance.Replace(".", ",");
+        this.cardBalance = cardBalance.Replace(".", ",");
 
-        if (double.TryParse(CardBalanceText.text, out double result))
+        if (double.TryParse(this.cardBalance, out double result))
         {
-            CardBalanceText.text = result.ToString();
+            this.cardBalance = result.ToString();
 
             // ќбрезание значение до двух после зап€той
-            double doubleVal = Convert.ToDouble(CardBalanceText.text);
+            double doubleVal = Convert.ToDouble(this.cardBalance);
             doubleVal = Math.Round(doubleVal, 2);
-            CardBalanceText.text = doubleVal.ToString();
+            this.cardBalance = doubleVal.ToString();
 
             // ƒобавл€ет нули в конце, если других значений нет
-            if (!CardBalanceText.text.Contains(","))
+            if (!this.cardBalance.Contains(","))
             {
-                CardBalanceText.text += ",00";
+                this.cardBalance += ",00";
             }
-            else if (CardBalanceText.text.Length == (CardBalanceText.text.IndexOf(',') + 2))
+            else if (this.cardBalance.Length == (this.cardBalance.IndexOf(',') + 2))
             {
-                CardBalanceText.text += "0";
+                this.cardBalance += "0";
             }
 
-            CardBalanceText.text = CardBalanceText.text.Replace(",", ".");
+            this.cardBalance = this.cardBalance.Replace(",", ".");
+
             isBalanceSet = true;
         }
         else if (cardBalance == string.Empty)
         {
-            CardBalanceText.text = "0.00";
+            this.cardBalance = "0.00";
+
             isBalanceSet = true;
         }
         else
         {
-            CardBalanceText.text = wrongBalanceWarning;
+            this.cardBalance = wrongBalanceWarning;
+
             isBalanceSet = false;
         }
+
+        CardBalanceText.text = TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, cardCurrency) + " "
+            + TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.White, this.cardBalance);
     }
 
     public void SetCurrency(string currency)
     {
-        CardCurrencyText.text = currency;
+        cardCurrency = currency;
+        SetCardBalance(cardBalance);
     }
 
     public void ToggleCurrencyAnimation(int ChoosedCurrencyID)
@@ -121,9 +135,9 @@ public class NewCardMenu : MonoBehaviour
 
     public void CreateNewCard()
     {
-        float CardBalanceFloat = float.Parse(CardBalanceText.text.Replace('.', ','));
+        float CardBalanceFloat = float.Parse(cardBalance.Replace('.', ','));
 
-        new Card(CardNameText.text, CardBalanceText.text, CardCurrencyText.text, CardBalanceFloat);
+        new Card(CardNameText.text, cardBalance, cardCurrency, CardBalanceFloat);
 
         ToggleNewCardMenu();
     }
