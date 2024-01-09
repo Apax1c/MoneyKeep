@@ -1,8 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VectorGraphics;
 using UnityEngine;
 
-public class CategoryChooseItem : MonoBehaviour
+public class ProfitCategoryChooseItem : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI categoryNameText;
 
@@ -11,13 +13,13 @@ public class CategoryChooseItem : MonoBehaviour
     [SerializeField] private SVGImage backgroundImage;
     [SerializeField] private SVGImage iconImage;
 
-    private CategoryChooseMenu categoryChooseMenuScript;
+    private ProfitCategoryChooseMenu categoryChooseMenuScript;
 
     private int categoryId;
 
     private void Start()
     {
-        categoryChooseMenuScript = CategoryChooseMenu.instance;
+        categoryChooseMenuScript = ProfitCategoryChooseMenu.instance;
     }
 
     private void Update()

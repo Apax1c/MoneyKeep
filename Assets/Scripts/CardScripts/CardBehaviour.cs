@@ -21,13 +21,24 @@ public class CardBehaviour : MonoBehaviour
         CardName = PlayerPrefs.GetString("CardName0", "Картка Універсальна");
         CardBalance = PlayerPrefs.GetString("CardBalance0", "0.00");
         CardCurrency = PlayerPrefs.GetString("CardCurrency0", "$");
+    }
 
+    private void Start()
+    {
         // Attach events (creating of new card and succesful spending)
         Card.OnCardCreate += Card_OnCardCreate;
         SpendingMenu.instance.OnBalanceUpdate += SpendingMenu_OnBalanceUpdate;
+        ProfitMenu.instance.OnBalanceUpdate += ProfitMenu_OnBalanceUpdate;
     }
 
     private void SpendingMenu_OnBalanceUpdate(object sender, EventArgs e)
+    {
+        CardBalance = Card.CardList[CardId][1];
+
+        OnCardBalanceUpdate?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void ProfitMenu_OnBalanceUpdate(object sender, EventArgs e)
     {
         CardBalance = Card.CardList[CardId][1];
 
@@ -47,9 +58,10 @@ public class CardBehaviour : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         Card.OnCardCreate -= Card_OnCardCreate;
         SpendingMenu.instance.OnBalanceUpdate -= SpendingMenu_OnBalanceUpdate;
+        ProfitMenu.instance.OnBalanceUpdate -= ProfitMenu_OnBalanceUpdate;
     }
 }

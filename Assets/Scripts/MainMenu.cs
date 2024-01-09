@@ -12,16 +12,14 @@ public class MainMenu : MonoBehaviour
     private float totalBalance;
     private int balanceIdInList = 1;
 
-    private void Awake()
+    // Start is called before the first frame update
+    private void Start()
     {
         // Attach events (creating of new card and succesful spending)
         Card.OnCardCreate += Card_OnCardCreate;
         SpendingMenu.instance.OnBalanceUpdate += SpendingMenu_OnBalanceUpdate;
-    }
+        ProfitMenu.instance.OnBalanceUpdate += ProfitMenu_OnBalanceUpdate;
 
-    // Start is called before the first frame update
-    private void Start()
-    {
         currentDateText.text = (char.ToUpper(DateTime.Now.ToString("MMMM, yyyy")[0]) + DateTime.Now.ToString("MMMM, yyyy").Substring(1));
         
         SetTotalCardBalance();
@@ -33,6 +31,11 @@ public class MainMenu : MonoBehaviour
     }
 
     private void SpendingMenu_OnBalanceUpdate(object sender, EventArgs e)
+    {
+        SetTotalCardBalance();
+    }
+
+    private void ProfitMenu_OnBalanceUpdate(object sender, EventArgs e)
     {
         SetTotalCardBalance();
     }
@@ -49,5 +52,12 @@ public class MainMenu : MonoBehaviour
         }
 
         totalBalanceText.text = totalBalance.ToString();
+    }
+
+    private void OnDisable()
+    {
+        Card.OnCardCreate -= Card_OnCardCreate;
+        SpendingMenu.instance.OnBalanceUpdate -= SpendingMenu_OnBalanceUpdate;
+        ProfitMenu.instance.OnBalanceUpdate -= ProfitMenu_OnBalanceUpdate;
     }
 }

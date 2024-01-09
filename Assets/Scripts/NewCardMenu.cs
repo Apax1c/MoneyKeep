@@ -148,4 +148,11 @@ public class NewCardMenu : MonoBehaviour
 
         newCardMenuAnimator.SetBool(IS_TOGGLED, isToggled);
     }
+
+    public void CloseMenu()
+    {
+        isToggled = false;
+
+        newCardMenuAnimator.SetBool(IS_TOGGLED, isToggled);
+    }
 }

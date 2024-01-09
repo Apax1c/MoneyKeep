@@ -1,12 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VectorGraphics;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class CategoryChooseMenu : MonoBehaviour
+public class ProfitCategoryChooseMenu : MonoBehaviour
 {
     // Singleton
-    public static CategoryChooseMenu instance;
+    public static ProfitCategoryChooseMenu instance;
 
     [Header("GameObjects")]
     [SerializeField] private GameObject categoryItemPrefab;
@@ -17,7 +18,7 @@ public class CategoryChooseMenu : MonoBehaviour
     [SerializeField] private SVGImage inputFieldIcon;
     [SerializeField] private TMP_InputField categoryInputField;
 
-    private SpendingMenu spendingsMenuScript;
+    private ProfitMenu spendingsMenuScript;
 
     private Animator chooseCardAnimator;
 
@@ -35,7 +36,7 @@ public class CategoryChooseMenu : MonoBehaviour
 
     private void Start()
     {
-        spendingsMenuScript = SpendingMenu.instance;
+        spendingsMenuScript = ProfitMenu.instance;
         choosedCategoryId = 0;
 
         LoadCategoryItems();
@@ -60,7 +61,7 @@ public class CategoryChooseMenu : MonoBehaviour
 
     private void LoadCategoryItems()
     {
-        if(contentGO.transform.childCount != 0)
+        if (contentGO.transform.childCount != 0)
         {
             for (int i = 0; i < contentGO.transform.childCount; i++)
             {
@@ -71,12 +72,12 @@ public class CategoryChooseMenu : MonoBehaviour
             }
         }
 
-        CategoryDataSource categoryDataSource = (CategoryDataSource)Resources.Load("CategoryDataSource");
+        CategoryDataSource categoryDataSource = (CategoryDataSource)Resources.Load("ProfitCategoryDataSource");
 
         for (int i = 0; i < categoryDataSource.lsItems.Length; i++)
         {
             GameObject newCategoryCardItem = Instantiate(categoryItemPrefab, contentGO.transform);
-            newCategoryCardItem.GetComponent<CategoryChooseItem>().SetCategory(categoryDataSource.lsItems[i]);
+            newCategoryCardItem.GetComponent<ProfitCategoryChooseItem>().SetCategory(categoryDataSource.lsItems[i]);
         }
 
         UpdateContentSize();
