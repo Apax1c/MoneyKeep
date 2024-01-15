@@ -69,6 +69,7 @@ public class ProfitMenu : TransactionMenus
         InputText.text = InputText.text.Replace(",", ".");
 
         GameObject newItemGO = Instantiate(NewTransactionHistoryPrefab, HistoryContent);
+        newItemGO.transform.SetAsFirstSibling();
         TransactionHistoryItem newItem = newItemGO.GetComponent<TransactionHistoryItem>();
         newItem.TransactionHistory(
             categoryDataSource.lsItems[categoryId].categoryName + transactionComment, 

@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 3914933023414283901}
   - component: {fileID: 3914933023414283902}
   m_Layer: 5
-  m_Name: TransactionTimeText
+  m_Name: CardNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,7 +564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transactionNameText: {fileID: 3914933023646125064}
-  transactionTimeText: {fileID: 3914933023414283902}
+  cardNameText: {fileID: 3914933023414283902}
   transactionSummText: {fileID: 3914933023023331204}
   categoryBackground: {fileID: 3914933023256154248}
   categoryIcon: {fileID: 3914933024534598027}
