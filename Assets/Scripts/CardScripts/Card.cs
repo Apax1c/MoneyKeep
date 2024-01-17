@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 public class Card
@@ -16,6 +17,7 @@ public class Card
 
     // Event
     public static event EventHandler OnCardCreate;
+    public static event EventHandler OnCardDelete;
 
     /// <summary>
     /// Initializes new Card and saves data to PlayerPrefs
@@ -38,6 +40,7 @@ public class Card
 
         // Set count of card
         PlayerPrefs.SetInt(NUMBER_OF_CARDS, CardList.Count);
+        PlayerPrefs.Save();
 
         // Send event that new card was created
         OnCardCreate?.Invoke(this, EventArgs.Empty);
@@ -55,12 +58,54 @@ public class Card
         {
             // Add items to CardList (name, balance and currency)
             CardList.Add(new string[]
-            {   PlayerPrefs.GetString(CARD_NAME + CardListCount.ToString()),
+            {   
+                PlayerPrefs.GetString(CARD_NAME + CardListCount.ToString()),
                 PlayerPrefs.GetString(CARD_BALANCE + CardListCount.ToString()),
                 PlayerPrefs.GetString(CARD_CURRENCY + CardListCount.ToString())
             });
 
             CardListCount++;
         }
+    }
+
+    public static void UpdateCardList(int cardId, string name, string balance, string currency)
+    {
+        CardList[cardId][0] = name;
+        CardList[cardId][1] = balance;
+        CardList[cardId][2] = currency;
+
+        PlayerPrefs.Save();
+    }
+
+    public static void DeleteCard(int cardId)
+    {
+        UnityEngine.Debug.Log("Delete Process");
+        UnityEngine.Debug.Log("Name: " + CardList[cardId][0] + "; Balance: " + CardList[cardId][1]);
+
+        CardList.RemoveAt(cardId);
+        int CardListCount = 0;
+
+        PlayerPrefs.DeleteAll();
+
+        if (CardList.Count == 0)
+        {
+            OnCardDelete?.Invoke(EditCardMenu.instance, EventArgs.Empty);
+            return;
+        }
+
+        while (CardListCount < CardList.Count)
+        {
+            PlayerPrefs.SetString(CARD_NAME + (CardListCount).ToString(), CardList[CardListCount][0]);
+            PlayerPrefs.SetString(CARD_BALANCE + (CardListCount).ToString(), CardList[CardListCount][1]);
+            PlayerPrefs.SetString(CARD_CURRENCY + (CardListCount).ToString(), CardList[CardListCount][2]);
+
+            // Set count of card
+            PlayerPrefs.SetInt(NUMBER_OF_CARDS, CardList.Count);
+
+            CardListCount++;
+        }
+        PlayerPrefs.Save();
+
+        OnCardDelete?.Invoke(EditCardMenu.instance, EventArgs.Empty);
     }
 }

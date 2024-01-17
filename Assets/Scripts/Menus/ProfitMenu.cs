@@ -2,17 +2,17 @@ using System;
 using System.Globalization;
 using UnityEngine;
 
-public class SpendingMenu : TransactionMenus
+public class ProfitMenu : TransactionMenus
 {
-    public static SpendingMenu instance;
+    public static ProfitMenu instance;
 
     [Header("Choose Card Menu")]
     [SerializeField] private GameObject CardChooseMenuGO;
-    private CardChooseMenu cardChooseMenuScript;
+    private ProfitCardChooseMenu cardChooseMenuScript;
 
     [Header("Category Choose Menu")]
     [SerializeField] private GameObject CategoryChooseMenuGO;
-    private CategoryChooseMenu categoryChooseMenuScript;
+    private ProfitCategoryChooseMenu categoryChooseMenuScript;
     public event EventHandler OnBalanceUpdate;
 
     private void Awake()
@@ -26,10 +26,10 @@ public class SpendingMenu : TransactionMenus
     {
         this.gameObject.SetActive(false);
         chooseCardId = 0;
-        cardChooseMenuScript = CardChooseMenu.instance;
-        categoryChooseMenuScript = CategoryChooseMenu.instance;
+        cardChooseMenuScript = ProfitCardChooseMenu.instance;
+        categoryChooseMenuScript = ProfitCategoryChooseMenu.instance;
 
-        categoryDataSource = (CategoryDataSource)Resources.Load("CategoryDataSource");
+        categoryDataSource = (CategoryDataSource)Resources.Load("ProfitCategoryDataSource");
         UpdateCategoryId(0);
     }
 
@@ -42,7 +42,7 @@ public class SpendingMenu : TransactionMenus
     private void UpdateCardBalance()
     {
         Card.LoadCardList();
-        float cardBalanceFloat = PlayerPrefs.GetFloat(Card.CARD_BALANCE_FLOAT + chooseCardId, 0f) - float.Parse(InputText.text.Replace('.', ','));
+        float cardBalanceFloat = PlayerPrefs.GetFloat(Card.CARD_BALANCE_FLOAT + chooseCardId, 0f) + float.Parse(InputText.text.Replace('.', ','));
         string cardBalanceText = cardBalanceFloat.ToString();
 
         Card.CardList[chooseCardId][1] = cardBalanceText.Replace(',', '.');
@@ -54,7 +54,7 @@ public class SpendingMenu : TransactionMenus
 
     private void CreateNewHistoryItem()
     {
-        if(InputText.text.Contains("+") || InputText.text.Contains("-") || InputText.text.Contains("*") || InputText.text.Contains("/"))
+        if (InputText.text.Contains("+") || InputText.text.Contains("-") || InputText.text.Contains("*") || InputText.text.Contains("/"))
         {
             Equals();
         }
@@ -74,10 +74,18 @@ public class SpendingMenu : TransactionMenus
         newItem.TransactionHistory(
             categoryDataSource.lsItems[categoryId].categoryName + transactionComment, 
             ChooseCardName.text, 
-            TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Red, "-" + InputText.text), 
+            TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, "+" + InputText.text),
             categoryDataSource.lsItems[categoryId].categoryIcon, 
             categoryDataSource.lsItems[categoryId].categoryColor, 
             categoryDataSource.lsItems[categoryId].categoryIconColor);
+
+        TransactionData newTransactionData = new TransactionData(
+            categoryDataSource.lsItems[categoryId].categoryName + transactionComment,
+            ChooseCardName.text,
+            TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, "+" + InputText.text),
+            categoryId
+            );
+        DataManager.Instance.AddOrUpdateTransaction(newTransactionData);
 
         ToggleMenu();
     }
@@ -103,7 +111,7 @@ public class SpendingMenu : TransactionMenus
     public void UpdateCategoryId(int newCategoryId, string comment = null)
     {
         categoryId = newCategoryId;
-        
+
         categoryPreviewBackground.color = categoryDataSource.lsItems[categoryId].categoryColor;
         categoryPreviewIcon.sprite = categoryDataSource.lsItems[categoryId].categoryIcon;
         categoryPreviewIcon.color = categoryDataSource.lsItems[categoryId].categoryIconColor;

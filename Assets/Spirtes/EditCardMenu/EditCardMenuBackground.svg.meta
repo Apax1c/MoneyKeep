@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: eb2c6931d1dd3eb4486b2216877f222b
+guid: 0b621a3ec8cc141468196332a8eabae8
 labels:
 - Background
 ScriptedImporter:
@@ -52,6 +52,6 @@ ScriptedImporter:
         y: 0
         width: 0
         height: 0
-      spriteID: 29e1358acd829de4581fc8921d1df2e8
+      spriteID: e59e5c2a9efb86742a1a37ae5ae590c8
       internalID: 0
     PhysicsOutlines: []
