@@ -6,7 +6,8 @@ public static class TextColors
     {
         Green,
         White,
-        Red
+        Red,
+        Black
     }
 
     public static Dictionary<DefaultColorsEnum, string> ColorsToStringList { get; private set; } = new Dictionary<DefaultColorsEnum, string>()
@@ -14,6 +15,7 @@ public static class TextColors
         { DefaultColorsEnum.Green, "<color=#5EDEA9>" },
         { DefaultColorsEnum.White, "<color=#F6F6F6>" },
         { DefaultColorsEnum.Red, "<color=#ED808D>" },
+        { DefaultColorsEnum.Black, "<color=#1B1B1B>" },
     };
 
     public static string ApplyColorToText(DefaultColorsEnum colors, string text)

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Transactions;
 using UnityEngine;
 
 public class SpendingMenu : TransactionMenus
@@ -68,26 +70,55 @@ public class SpendingMenu : TransactionMenus
         InputText.text = doubleVal.ToString(provider);
         InputText.text = InputText.text.Replace(",", ".");
 
+        List<TransactionData> list = DataManager.Instance.GetHistory();
+        if (list != null && char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1) != list[list.Count - 1].date)
+        {
+            GameObject newDateItemGO = Instantiate(NewDateItemPrefab, HistoryContent);
+            newDateItemGO.transform.SetAsFirstSibling();
+
+            DateHistoryItem newDateItem = newDateItemGO.GetComponent<DateHistoryItem>();
+            newDateItem.SetDateText(char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1));
+        }
+        else if (list == null)
+        {
+            GameObject newDateItemGO = Instantiate(NewDateItemPrefab, HistoryContent);
+            newDateItemGO.transform.SetAsFirstSibling();
+
+            DateHistoryItem newDateItem = newDateItemGO.GetComponent<DateHistoryItem>();
+            newDateItem.SetDateText(char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1));
+        }
+
+        InstantiateHistoryItem();
+        SaveTransactionData();
+
+        ToggleMenu();
+    }
+
+    private void InstantiateHistoryItem()
+    {
         GameObject newItemGO = Instantiate(NewTransactionHistoryPrefab, HistoryContent);
-        newItemGO.transform.SetAsFirstSibling();
+        newItemGO.transform.SetSiblingIndex(1);
         TransactionHistoryItem newItem = newItemGO.GetComponent<TransactionHistoryItem>();
         newItem.TransactionHistory(
-            categoryDataSource.lsItems[categoryId].categoryName + transactionComment, 
-            ChooseCardName.text, 
-            TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Red, "-" + InputText.text), 
-            categoryDataSource.lsItems[categoryId].categoryIcon, 
-            categoryDataSource.lsItems[categoryId].categoryColor, 
+            categoryDataSource.lsItems[categoryId].categoryName + transactionComment,
+            ChooseCardName.text,
+            TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Red, "-" + InputText.text),
+            categoryDataSource.lsItems[categoryId].categoryIcon,
+            categoryDataSource.lsItems[categoryId].categoryColor,
             categoryDataSource.lsItems[categoryId].categoryIconColor);
+    }
 
+    private void SaveTransactionData()
+    {
         TransactionData newTransactionData = new TransactionData(
             categoryDataSource.lsItems[categoryId].categoryName + transactionComment,
             ChooseCardName.text,
             TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Red, "-" + InputText.text),
-            categoryId
+            categoryId,
+            char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1)
             );
-        DataManager.Instance.AddOrUpdateTransaction(newTransactionData);
 
-        ToggleMenu();
+        DataManager.Instance.AddOrUpdateTransaction(newTransactionData);
     }
 
     public void OpenCardChooseMenu()

@@ -38,6 +38,7 @@ public class EditCardMenu : MonoBehaviour
     [SerializeField] private CardBehaviour cardBehaviour;
 
     private string cardCurrency;
+    private string cardCurrencyCode;
     private string cardBalance;
 
     private bool isNameSet = false;
@@ -140,6 +141,11 @@ public class EditCardMenu : MonoBehaviour
         SetCardBalance(cardBalance);
     }
 
+    public void SetCurrencyCode(string currencyCode)
+    {
+        cardCurrencyCode = currencyCode;
+    }
+
     public void ToggleCurrencyAnimation(int ChoosedCurrencyID)
     {
         EditCardCurrencyChooseAC.SetInteger(CHOOSED_CURRENCY_ID, ChoosedCurrencyID);
@@ -154,7 +160,7 @@ public class EditCardMenu : MonoBehaviour
         PlayerPrefs.SetString(Card.CARD_CURRENCY + cardBehaviour.CardId, cardCurrency);
         PlayerPrefs.SetFloat(Card.CARD_BALANCE_FLOAT + cardBehaviour.CardId, CardBalanceFloat);
 
-        Card.UpdateCardList(cardBehaviour.CardId, CardNameText.text, cardBalance, cardCurrency);
+        Card.UpdateCardList(cardBehaviour.CardId, CardNameText.text, cardBalance, cardCurrency, cardCurrencyCode);
 
         ToggleMenu();
 

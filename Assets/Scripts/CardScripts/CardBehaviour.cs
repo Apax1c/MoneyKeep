@@ -31,6 +31,20 @@ public class CardBehaviour : MonoBehaviour
         SpendingMenu.instance.OnBalanceUpdate += SpendingMenu_OnBalanceUpdate;
         ProfitMenu.instance.OnBalanceUpdate += ProfitMenu_OnBalanceUpdate;
         EditCardMenu.instance.OnBalanceUpdate += EditCardMenu_OnCardUpdate;
+        MainCardChooseMenu.instance.OnMainCardChoosed += MainCardChooseMenu_OnMainCardChoosed;
+    }
+
+    private void MainCardChooseMenu_OnMainCardChoosed(object sender, EventArgs e)
+    {
+        CardId = MainCardChooseMenu.instance.cardId;
+
+        Card.LoadCardList();
+
+        CardName = Card.CardList[CardId][0];
+        CardBalance = Card.CardList[CardId][1];
+        CardCurrency = Card.CardList[CardId][2];
+
+        OnCardInfoSet?.Invoke(this, EventArgs.Empty);
     }
 
     private void SpendingMenu_OnBalanceUpdate(object sender, EventArgs e)
@@ -99,5 +113,6 @@ public class CardBehaviour : MonoBehaviour
         SpendingMenu.instance.OnBalanceUpdate -= SpendingMenu_OnBalanceUpdate;
         ProfitMenu.instance.OnBalanceUpdate -= ProfitMenu_OnBalanceUpdate;
         EditCardMenu.instance.OnBalanceUpdate -= EditCardMenu_OnCardUpdate;
+        MainCardChooseMenu.instance.OnMainCardChoosed -= MainCardChooseMenu_OnMainCardChoosed;
     }
 }

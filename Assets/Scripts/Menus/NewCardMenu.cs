@@ -29,6 +29,7 @@ public class NewCardMenu : MonoBehaviour
     [SerializeField] private Button confirmButton;
 
     private string cardCurrency;
+    private string cardCurrencyCode;
     private string cardBalance;
 
     private bool isNameSet = false;
@@ -128,6 +129,11 @@ public class NewCardMenu : MonoBehaviour
         SetCardBalance(cardBalance);
     }
 
+    public void SetCurrencyCode(string currencyCode)
+    {
+        cardCurrencyCode = currencyCode;
+    }
+
     public void ToggleCurrencyAnimation(int ChoosedCurrencyID)
     {
         NewCardCurrencyChooseAC.SetInteger(CHOOSED_CURRENCY_ID, ChoosedCurrencyID);
@@ -137,7 +143,7 @@ public class NewCardMenu : MonoBehaviour
     {
         float CardBalanceFloat = float.Parse(cardBalance.Replace('.', ','));
 
-        new Card(CardNameText.text, cardBalance, cardCurrency, CardBalanceFloat);
+        new Card(CardNameText.text, cardBalance, cardCurrency, CardBalanceFloat, cardCurrencyCode);
 
         ToggleNewCardMenu();
     }

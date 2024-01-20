@@ -19,6 +19,7 @@ public class TransactionMenus : MonoBehaviour
     [Header("Items for History")]
     public Transform HistoryContent;
     public GameObject NewTransactionHistoryPrefab;
+    public GameObject NewDateItemPrefab;
     public string transactionComment;
 
     public int chooseCardId;

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -52,6 +53,11 @@ public class MainMenu : MonoBehaviour
         SetTotalCardBalance();
     }
 
+    private void Update()
+    {
+        SetTotalCardBalance();
+    }
+
     private void SetTotalCardBalance()
     {
         totalBalance = 0;
@@ -60,10 +66,34 @@ public class MainMenu : MonoBehaviour
 
         foreach (string[] card in Card.CardList)
         {
-            totalBalance += float.Parse(card[balanceIdInList].Replace(".", ","));
+            totalBalance += GetConvertedValue(float.Parse(card[balanceIdInList].Replace(".", ",")), card[3]);
         }
 
-        totalBalanceText.text = totalBalance.ToString();
+        double doubleVal = Convert.ToDouble(totalBalance);
+        doubleVal = Math.Round(doubleVal, 2);
+        string cardBalance = doubleVal.ToString();
+
+        totalBalanceText.text = TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, "$") + TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Black, cardBalance);
+    }
+
+    private float GetConvertedValue(float value, string currencyCode)
+    {
+        var convertedValue = currencyCode switch
+        {
+            "USD" => CurrencyConverter.instance.ConvertUSD(value),
+            "EUR" => CurrencyConverter.instance.ConvertEUR(value),
+            "UAH" => CurrencyConverter.instance.ConvertUAH(value),
+            "JPY" => CurrencyConverter.instance.ConvertJPY(value),
+            "AUD" => CurrencyConverter.instance.ConvertAUD(value),
+            "CAD" => CurrencyConverter.instance.ConvertCAD(value),
+            "GBP" => CurrencyConverter.instance.ConvertGBP(value),
+            "CHF" => CurrencyConverter.instance.ConvertCHF(value),
+            "NOK" => CurrencyConverter.instance.ConvertNOK(value),
+            "CNY" => CurrencyConverter.instance.ConvertCNY(value),
+            "SEK" => CurrencyConverter.instance.ConvertSEK(value),
+            _ => CurrencyConverter.instance.ConvertUSD(value),
+        };
+        return convertedValue;
     }
 
     private void OnDisable()

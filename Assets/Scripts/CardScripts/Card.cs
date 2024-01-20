@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Card
 {
@@ -14,6 +15,7 @@ public class Card
     public const string CARD_BALANCE = "CardBalance";
     public const string CARD_BALANCE_FLOAT = "CardBalanceFloat";
     public const string CARD_CURRENCY = "CardCurrency";
+    public const string CARD_CURRENCY_CODE = "CardCurrencyCode";
 
     // Event
     public static event EventHandler OnCardCreate;
@@ -26,17 +28,20 @@ public class Card
     /// <param name="balance">Card balance in string</param>
     /// <param name="currency">Card currency in string</param>
     /// <param name="balanceFloat">Card balance in float</param>
-    public Card(string name, string balance, string currency, float balanceFloat)
+    public Card(string name, string balance, string currency, float balanceFloat, string currencyCode)
     {
         LoadCardList();
 
         // Add data of new card
-        CardList.Add(new string[] { name, balance, currency });
+        CardList.Add(new string[] { name, balance, currency, currencyCode });
+
         PlayerPrefs.SetString(CARD_NAME + (CardList.Count - 1).ToString(), name);
         PlayerPrefs.SetString(CARD_BALANCE + (CardList.Count - 1).ToString(), balance);
         PlayerPrefs.SetString(CARD_CURRENCY + (CardList.Count - 1).ToString(), currency);
+        PlayerPrefs.SetString(CARD_CURRENCY_CODE + (CardList.Count - 1), currencyCode);
 
         PlayerPrefs.SetFloat(CARD_BALANCE_FLOAT + (CardList.Count - 1), balanceFloat);
+
 
         // Set count of card
         PlayerPrefs.SetInt(NUMBER_OF_CARDS, CardList.Count);
@@ -61,27 +66,26 @@ public class Card
             {   
                 PlayerPrefs.GetString(CARD_NAME + CardListCount.ToString()),
                 PlayerPrefs.GetString(CARD_BALANCE + CardListCount.ToString()),
-                PlayerPrefs.GetString(CARD_CURRENCY + CardListCount.ToString())
+                PlayerPrefs.GetString(CARD_CURRENCY + CardListCount.ToString()),
+                PlayerPrefs.GetString(CARD_CURRENCY_CODE + CardListCount.ToString()),
             });
 
             CardListCount++;
         }
     }
 
-    public static void UpdateCardList(int cardId, string name, string balance, string currency)
+    public static void UpdateCardList(int cardId, string name, string balance, string currency, string currencyCode)
     {
         CardList[cardId][0] = name;
         CardList[cardId][1] = balance;
         CardList[cardId][2] = currency;
+        CardList[cardId][3] = currencyCode;
 
         PlayerPrefs.Save();
     }
 
     public static void DeleteCard(int cardId)
     {
-        UnityEngine.Debug.Log("Delete Process");
-        UnityEngine.Debug.Log("Name: " + CardList[cardId][0] + "; Balance: " + CardList[cardId][1]);
-
         CardList.RemoveAt(cardId);
         int CardListCount = 0;
 
@@ -98,6 +102,7 @@ public class Card
             PlayerPrefs.SetString(CARD_NAME + (CardListCount).ToString(), CardList[CardListCount][0]);
             PlayerPrefs.SetString(CARD_BALANCE + (CardListCount).ToString(), CardList[CardListCount][1]);
             PlayerPrefs.SetString(CARD_CURRENCY + (CardListCount).ToString(), CardList[CardListCount][2]);
+            PlayerPrefs.SetString(CARD_CURRENCY_CODE + (CardListCount).ToString(), CardList[CardListCount][3]);
 
             // Set count of card
             PlayerPrefs.SetInt(NUMBER_OF_CARDS, CardList.Count);
