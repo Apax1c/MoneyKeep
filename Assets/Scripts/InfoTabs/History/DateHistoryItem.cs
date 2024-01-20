@@ -45,7 +45,6 @@ public class DateHistoryItem : MonoBehaviour
 
                 string trimmedString = cutIndex != -1 ? item.transactionSum.Substring(cutIndex) : item.transactionSum;
 
-                Debug.Log(trimmedString);
                 difference += float.Parse(trimmedString.Replace(".", ","));
             }
         }
