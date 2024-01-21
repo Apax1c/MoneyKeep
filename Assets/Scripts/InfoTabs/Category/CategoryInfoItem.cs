@@ -17,7 +17,7 @@ public class CategoryInfoItem : MonoBehaviour
 
     private void Update()
     {
-        differenceSumText.text = TextColors.ApplyColorToText(backgroundImage.color, GetCategorySumm(categoryNameText.text));
+        differenceSumText.text = TextColors.ApplyColorToText(iconImage.color, GetCategorySumm(categoryNameText.text));
     }
 
     public void SetCategory(CategoryData data)
@@ -25,7 +25,7 @@ public class CategoryInfoItem : MonoBehaviour
         categoryId = data.id;
 
         categoryNameText.text = data.categoryName;
-        differenceSumText.text = TextColors.ApplyColorToText(data.categoryColor, GetCategorySumm(data.categoryName));
+        differenceSumText.text = TextColors.ApplyColorToText(data.categoryIconColor, GetCategorySumm(data.categoryName));
 
         backgroundImage.color = data.categoryColor;
         iconImage.sprite = data.categoryIcon;
