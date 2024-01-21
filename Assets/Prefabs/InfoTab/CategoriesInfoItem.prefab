@@ -134,8 +134,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <color=#DEB360>$4506
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fc44c94ba682aaf4184665a7d4cf156c, type: 2}
-  m_sharedMaterial: {fileID: -9020505582305019395, guid: fc44c94ba682aaf4184665a7d4cf156c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c0c038c0fcd31524a9ff1b8a58df7817, type: 2}
+  m_sharedMaterial: {fileID: -6034231592749978595, guid: c0c038c0fcd31524a9ff1b8a58df7817, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

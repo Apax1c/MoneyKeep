@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VectorGraphics;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class CategoryInfoItem : MonoBehaviour
 {
@@ -13,7 +12,12 @@ public class CategoryInfoItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI differenceSumText;
     [SerializeField] private TextMeshProUGUI categoryNameText;
 
-    private int categoryId;
+    private string mainCurrency;
+
+    private void Start()
+    {
+        mainCurrency = PlayerPrefs.GetString("MainCurrency", "$");
+    }
 
     private void Update()
     {
@@ -22,8 +26,6 @@ public class CategoryInfoItem : MonoBehaviour
 
     public void SetCategory(CategoryData data)
     {
-        categoryId = data.id;
-
         categoryNameText.text = data.categoryName;
         differenceSumText.text = TextColors.ApplyColorToText(data.categoryIconColor, GetCategorySumm(data.categoryName));
 
@@ -39,7 +41,7 @@ public class CategoryInfoItem : MonoBehaviour
         float summ = 0f;
         if(transactionsList == null)
         {
-            return summ.ToString();
+            return mainCurrency + summ.ToString();
         }
 
         foreach (TransactionData transactionData in transactionsList)
@@ -56,10 +58,13 @@ public class CategoryInfoItem : MonoBehaviour
                 }
                 string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
 
-                summ += float.Parse(trimmedString.Replace(".", ","));
+                summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
             }
         }
 
-        return summ.ToString().Replace(",", ".");
+        double doubleVal = Convert.ToDouble(summ);
+        doubleVal = Math.Round(doubleVal, 2);
+
+        return mainCurrency + doubleVal.ToString().Replace(",", ".");
     }
 }

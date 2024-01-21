@@ -56,7 +56,7 @@ public class SpendingMenu : TransactionMenus
 
     private void CreateNewHistoryItem()
     {
-        if(InputText.text.Contains("+") || InputText.text.Contains("-") || InputText.text.Contains("*") || InputText.text.Contains("/"))
+        if (InputText.text.Contains("+") || InputText.text.Contains("-") || InputText.text.Contains("*") || InputText.text.Contains("/"))
         {
             Equals();
         }
@@ -70,6 +70,15 @@ public class SpendingMenu : TransactionMenus
         InputText.text = doubleVal.ToString(provider);
         InputText.text = InputText.text.Replace(",", ".");
 
+        InstantiateNewDateItem();
+        InstantiateHistoryItem();
+        SaveTransactionData();
+
+        ToggleMenu();
+    }
+
+    private void InstantiateNewDateItem()
+    {
         List<TransactionData> list = DataManager.Instance.GetHistory();
         if (list != null && char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1) != list[list.Count - 1].date)
         {
@@ -87,11 +96,6 @@ public class SpendingMenu : TransactionMenus
             DateHistoryItem newDateItem = newDateItemGO.GetComponent<DateHistoryItem>();
             newDateItem.SetDateText(char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1));
         }
-
-        InstantiateHistoryItem();
-        SaveTransactionData();
-
-        ToggleMenu();
     }
 
     private void InstantiateHistoryItem()
@@ -115,7 +119,9 @@ public class SpendingMenu : TransactionMenus
             ChooseCardName.text,
             TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Red, "-" + InputText.text),
             categoryId,
-            char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1)
+            char.ToUpper(DateTime.Now.ToString("dddd, " + "dd.MM.yy")[0]) + DateTime.Now.ToString("dddd, " + "dd.MM.yy").Substring(1),
+            CurrencyText.text,
+            Card.CardList[chooseCardId][3]
             );
 
         DataManager.Instance.AddOrUpdateTransaction(newTransactionData);

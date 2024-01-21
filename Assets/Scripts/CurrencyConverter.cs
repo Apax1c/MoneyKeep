@@ -43,7 +43,7 @@ public class CurrencyConverter : MonoBehaviour
     {
         LoadLastSavedExchangeRate();
 
-        SetMainCurrency(PlayerPrefs.GetString("MainCurrency", "$"));
+        SetMainCurrency(PlayerPrefs.GetString("MainCurrencyCode", "USD"));
 
         StartCoroutine(GetExchangeRate());
     }
@@ -100,6 +100,27 @@ public class CurrencyConverter : MonoBehaviour
             PlayerPrefs.SetFloat("exchangeRateToCNY", exchangeRateToCNY);
             PlayerPrefs.SetFloat("exchangeRateToSEK", exchangeRateToSEK);
         }
+    }
+
+    public float GetConvertedValue(float value, string currencyCode)
+    {
+        var convertedValue = currencyCode switch
+        {
+            "USD" => ConvertUSD(value),
+            "EUR" => ConvertEUR(value),
+            "UAH" => ConvertUAH(value),
+            "JPY" => ConvertJPY(value),
+            "AUD" => ConvertAUD(value),
+            "CAD" => ConvertCAD(value),
+            "GBP" => ConvertGBP(value),
+            "CHF" => ConvertCHF(value),
+            "NOK" => ConvertNOK(value),
+            "CNY" => ConvertCNY(value),
+            "SEK" => ConvertSEK(value),
+            _ => ConvertUSD(value),
+        };
+
+        return convertedValue;
     }
 
     private void SetMainCurrency(string currency)

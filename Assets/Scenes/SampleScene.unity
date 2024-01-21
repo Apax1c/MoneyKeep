@@ -17785,7 +17785,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1060562602
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19842,6 +19842,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDateText: {fileID: 1284765067}
   totalBalanceText: {fileID: 408121405}
+  spendingsText: {fileID: 1887410862}
+  profitText: {fileID: 922659486}
   NewCardMenu: {fileID: 1811924305}
 --- !u!1 &1197075347
 GameObject:
