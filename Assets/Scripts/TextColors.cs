@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class TextColors
 {
@@ -21,5 +22,23 @@ public static class TextColors
     public static string ApplyColorToText(DefaultColorsEnum colors, string text)
     {
         return ColorsToStringList[colors] + text;
+    }
+
+    public static string ApplyColorToText(Color colors, string text)
+    {
+        string hexColor = ColorToHex(colors);
+        return  $"<color={hexColor}>{text}";
+    }
+
+    public static string ColorToHex(Color color)
+    {
+        int r = (int)(color.r * 255);
+        int g = (int)(color.g * 255);
+        int b = (int)(color.b * 255);
+        int a = (int)(color.a * 255);
+
+        string hex = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", r, g, b, a);
+
+        return hex;
     }
 }

@@ -22,35 +22,50 @@ public class CurrencyConverter : MonoBehaviour
     private string apiUrlSEK = "https://api.exchangerate-api.com/v4/latest/SEK";
 
     //Currency rates
-    private float exchangeRateToUSD = 0f;
-    private float exchangeRateToEUR = 0f;
-    private float exchangeRateToUAH = 0f;
-    private float exchangeRateToJPY = 0f;
-    private float exchangeRateToAUD = 0f;
-    private float exchangeRateToCAD = 0f;
-    private float exchangeRateToGBP = 0f;
-    private float exchangeRateToCHF = 0f;
-    private float exchangeRateToNOK = 0f;
-    private float exchangeRateToCNY = 0f;
-    private float exchangeRateToSEK = 0f;
+    private float exchangeRateToUSD = 1f;
+    private float exchangeRateToEUR = 1f;
+    private float exchangeRateToUAH = 1f;
+    private float exchangeRateToJPY = 1f;
+    private float exchangeRateToAUD = 1f;
+    private float exchangeRateToCAD = 1f;
+    private float exchangeRateToGBP = 1f;
+    private float exchangeRateToCHF = 1f;
+    private float exchangeRateToNOK = 1f;
+    private float exchangeRateToCNY = 1f;
+    private float exchangeRateToSEK = 1f;
 
     private void Awake()
     {
         instance = this;
     }
 
-    
-
     void Start()
     {
+        LoadLastSavedExchangeRate();
+
         SetMainCurrency(PlayerPrefs.GetString("MainCurrency", "$"));
 
         StartCoroutine(GetExchangeRate());
     }
 
+    private void LoadLastSavedExchangeRate()
+    {
+        exchangeRateToUSD = PlayerPrefs.GetFloat("exchangeRateToUSD", 1f);
+        exchangeRateToEUR = PlayerPrefs.GetFloat("exchangeRateToEUR", 1f);
+        exchangeRateToUAH = PlayerPrefs.GetFloat("exchangeRateToUAH", 1f);
+        exchangeRateToJPY = PlayerPrefs.GetFloat("exchangeRateToJPY", 1f);
+        exchangeRateToAUD = PlayerPrefs.GetFloat("exchangeRateToAUD", 1f);
+        exchangeRateToCAD = PlayerPrefs.GetFloat("exchangeRateToCAD", 1f);
+        exchangeRateToGBP = PlayerPrefs.GetFloat("exchangeRateToGBP", 1f);
+        exchangeRateToCHF = PlayerPrefs.GetFloat("exchangeRateToCHF", 1f);
+        exchangeRateToNOK = PlayerPrefs.GetFloat("exchangeRateToNOK", 1f);
+        exchangeRateToCNY = PlayerPrefs.GetFloat("exchangeRateToCNY", 1f);
+        exchangeRateToSEK = PlayerPrefs.GetFloat("exchangeRateToSEK", 1f);
+    }
+
     public IEnumerator GetExchangeRate()
     {
-        UnityWebRequest request = UnityWebRequest.Get(apiUrlUSD);
+        UnityWebRequest request = UnityWebRequest.Get(apiUrl);
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -72,6 +87,18 @@ public class CurrencyConverter : MonoBehaviour
             exchangeRateToNOK = response.rates.NOK;
             exchangeRateToCNY = response.rates.CNY;
             exchangeRateToSEK = response.rates.SEK;
+
+            PlayerPrefs.SetFloat("exchangeRateToUSD", exchangeRateToUSD);
+            PlayerPrefs.SetFloat("exchangeRateToEUR", exchangeRateToEUR);
+            PlayerPrefs.SetFloat("exchangeRateToUAH", exchangeRateToUAH);
+            PlayerPrefs.SetFloat("exchangeRateToJPY", exchangeRateToJPY);
+            PlayerPrefs.SetFloat("exchangeRateToAUD", exchangeRateToAUD);
+            PlayerPrefs.SetFloat("exchangeRateToCAD", exchangeRateToCAD);
+            PlayerPrefs.SetFloat("exchangeRateToGBP", exchangeRateToGBP);
+            PlayerPrefs.SetFloat("exchangeRateToCHF", exchangeRateToCHF);
+            PlayerPrefs.SetFloat("exchangeRateToNOK", exchangeRateToNOK);
+            PlayerPrefs.SetFloat("exchangeRateToCNY", exchangeRateToCNY);
+            PlayerPrefs.SetFloat("exchangeRateToSEK", exchangeRateToSEK);
         }
     }
 
