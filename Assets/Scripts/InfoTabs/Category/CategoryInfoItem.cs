@@ -13,6 +13,7 @@ public class CategoryInfoItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI categoryNameText;
 
     private string mainCurrency;
+    private int categoryId;
 
     private void Start()
     {
@@ -24,8 +25,15 @@ public class CategoryInfoItem : MonoBehaviour
         differenceSumText.text = TextColors.ApplyColorToText(iconImage.color, GetCategorySumm(categoryNameText.text));
     }
 
+    public void OnButtonClicked()
+    {
+        CategoryInfoMenu.instance.OpenMenu(categoryId);
+    }
+
     public void SetCategory(CategoryData data)
     {
+        categoryId = data.id;
+
         categoryNameText.text = data.categoryName;
         differenceSumText.text = TextColors.ApplyColorToText(data.categoryIconColor, GetCategorySumm(data.categoryName));
 
@@ -41,6 +49,7 @@ public class CategoryInfoItem : MonoBehaviour
         float summ = 0f;
         if(transactionsList == null)
         {
+            
             return mainCurrency + summ.ToString();
         }
 

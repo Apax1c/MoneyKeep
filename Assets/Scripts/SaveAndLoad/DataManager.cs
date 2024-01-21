@@ -115,7 +115,6 @@ public class DataManager : MonoBehaviour
             newItemGO.transform.SetSiblingIndex(1);
             TransactionHistoryItem newItem = newItemGO.GetComponent<TransactionHistoryItem>();
 
-
             if (transaction.transactionSum.Contains("-"))
             {
                 newItem.TransactionHistory(

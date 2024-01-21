@@ -8,6 +8,7 @@ public class TransactionMenus : MonoBehaviour
     public Animator spendingsMenuAnimator;
 
     public const string IS_MENU_TOGGLED = "isMenuToggled";
+    public bool isMenuToggled = false;
     public Animator menuButtonAnimator;
 
     public GameObject MainMenuBlackoutGO;
@@ -33,7 +34,6 @@ public class TransactionMenus : MonoBehaviour
     public SVGImage categoryPreviewIcon;
     public TextMeshProUGUI categoryPreviewName;
 
-    public bool isMenuToggled = false;
     public CategoryDataSource categoryDataSource;
 
     public void ToggleMenu()
