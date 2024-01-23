@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Transactions;
 using TMPro;
 using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CategoryInfoMenu : MonoBehaviour
 {
     public static CategoryInfoMenu instance;
 
-    public Animator categoryInfoMenuAnimator;
-    public const string IS_MENU_TOGGLED = "isMenuToggled";
-    public bool isMenuToggled = false;
+    private Animator categoryInfoMenuAnimator;
+    private const string IS_MENU_TOGGLED = "isMenuToggled";
+    private bool isMenuToggled = false;
 
     [Space]
     [SerializeField] private TextMeshProUGUI categoryNameText;
@@ -35,7 +37,27 @@ public class CategoryInfoMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI monthlyInfoDateText;
     [SerializeField] private TextMeshProUGUI monthlySumText;
 
+    [Header("SpendingBar")]
+    [SerializeField] private Image dailyBarImage;
+    [SerializeField] private Slider dailyBarSlider;
+    [SerializeField] private Image weeklyBarImage;
+    [SerializeField] private Slider weeklyBarSlider;
+    [SerializeField] private Image monthlyBarImage;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject dateItemPrefab;
+    [SerializeField] private GameObject transactionItemPrefab;
+
+    [Space]
+    [SerializeField] private Transform historyContentGO;
+    private string lastItemDate;
+    private List<TransactionData> transactions = new List<TransactionData>();
+
     private CategoryDataSource spendingsDataSource;
+
+    private float dailySum;
+    private float weeklySum;
+    private float monthlySum;
 
     private Color mainColor;
     private string mainCurrency;
@@ -48,6 +70,8 @@ public class CategoryInfoMenu : MonoBehaviour
 
     private void Start()
     {
+        categoryInfoMenuAnimator = GetComponent<Animator>();
+
         spendingsDataSource = (CategoryDataSource)Resources.Load("CategoryDataSource");
         mainCurrency = PlayerPrefs.GetString("MainCurrency", "$");
 
@@ -65,15 +89,21 @@ public class CategoryInfoMenu : MonoBehaviour
 
         mainColor = spendingsDataSource.lsItems[categoryId].categoryIconColor;
 
+        //Daily colors set
         dailyMarker.color = mainColor;
+        dailyBarImage.color = mainColor;
 
+        //Week colors set
         Color weekColor = mainColor;
         weekColor.a = 0.75f;
         weeklyMarker.color = weekColor;
 
+        //Month colors set
         Color monthColor = mainColor;
         monthColor.a = 0.5f;
         monthlyMarker.color = monthColor;
+        weeklyBarImage.color = monthColor;
+        monthlyBarImage.color = monthColor;
 
         dailyText.text = TextColors.ApplyColorToText(mainColor, "Сьогодні:");
         weeklyText.text = TextColors.ApplyColorToText(mainColor, "Тиждень:");
@@ -102,6 +132,33 @@ public class CategoryInfoMenu : MonoBehaviour
         LoadDailySpendings();
         LoadWeeklySpendings(); 
         LoadMonthlySpendings();
+        SetSlidersValue();
+
+        ClearHistory();
+        LoadHistory();
+    }
+
+    private void ClearHistory()
+    {
+        if (historyContentGO.transform.childCount != 0)
+        {
+            for (int i = 0; i < historyContentGO.transform.childCount; i++)
+            {
+                if (historyContentGO.transform.GetChild(i).gameObject != null)
+                {
+                    Destroy(historyContentGO.transform.GetChild(i).gameObject);
+                }
+            }
+        }
+    }
+
+    private void SetSlidersValue()
+    {
+        dailyBarSlider.maxValue = monthlySum;
+        dailyBarSlider.value = dailySum;
+
+        weeklyBarSlider.maxValue = monthlySum;
+        weeklyBarSlider.value = weeklySum;
     }
 
     private void LoadDailySpendings()
@@ -112,7 +169,7 @@ public class CategoryInfoMenu : MonoBehaviour
         float summ = 0f;
         if (transactionsList == null)
         {
-            dailyDateText.text = summ.ToString();
+            dailySumText.text = summ.ToString();
         }
         else
         {
@@ -133,8 +190,11 @@ public class CategoryInfoMenu : MonoBehaviour
                     }
                     string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
                     summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
+
                 }
             }
+
+            dailySum = summ;
 
             double doubleVal = Convert.ToDouble(summ);
             doubleVal = Math.Round(doubleVal, 2);
@@ -181,6 +241,8 @@ public class CategoryInfoMenu : MonoBehaviour
                 }
             }
 
+            weeklySum = summ;
+
             double doubleVal = Convert.ToDouble(summ);
             doubleVal = Math.Round(doubleVal, 2);
 
@@ -220,10 +282,57 @@ public class CategoryInfoMenu : MonoBehaviour
                 }
             }
 
+            monthlySum = summ;
+
             double doubleVal = Convert.ToDouble(summ);
             doubleVal = Math.Round(doubleVal, 2);
 
             monthlySumText.text = TextColors.ApplyColorToText(spendingsDataSource.lsItems[currentCategoryId].categoryIconColor, mainCurrency) + "</color>" + doubleVal.ToString().Replace(",", ".");
+        }
+    }
+
+    private void LoadHistory()
+    {
+        transactions = DataManager.Instance.GetHistory();
+
+        if (transactions == null)
+            return;
+        lastItemDate = transactions[0].date;
+
+        GameObject lastDateItemGO = Instantiate(dateItemPrefab, historyContentGO);
+        lastDateItemGO.transform.SetAsFirstSibling();
+
+        DateHistoryItem lastDateItem = lastDateItemGO.GetComponent<DateHistoryItem>();
+        lastDateItem.SetDateText(lastItemDate, categoryNameText.text);
+
+        foreach (var transaction in transactions)
+        {
+            if (!transaction.transactionName.Contains(categoryNameText.text))
+                continue;
+
+            if (lastItemDate != transaction.date)
+            {
+                GameObject newDateItemGO = Instantiate(dateItemPrefab, historyContentGO);
+                newDateItemGO.transform.SetAsFirstSibling();
+
+                DateHistoryItem newDateItem = newDateItemGO.GetComponent<DateHistoryItem>();
+                newDateItem.SetDateText(transaction.date, categoryNameText.text);
+
+                lastItemDate = transaction.date;
+            }
+
+            // Instantiate your objects here and initialize them with the transaction data
+            GameObject newItemGO = Instantiate(transactionItemPrefab, historyContentGO);
+            newItemGO.transform.SetSiblingIndex(1);
+            TransactionHistoryItem newItem = newItemGO.GetComponent<TransactionHistoryItem>();
+
+            newItem.TransactionHistory(
+                    transaction.transactionName,
+                    transaction.cardName,
+                    transaction.transactionSum,
+                    spendingsDataSource.lsItems[transaction.details].categoryIcon,
+                    spendingsDataSource.lsItems[transaction.details].categoryColor,
+                    spendingsDataSource.lsItems[transaction.details].categoryIconColor);
         }
     }
 

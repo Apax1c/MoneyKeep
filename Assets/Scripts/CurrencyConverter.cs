@@ -37,14 +37,14 @@ public class CurrencyConverter : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        LoadLastSavedExchangeRate();
+
+        SetMainCurrency(PlayerPrefs.GetString("MainCurrencyCode", "USD"));
     }
 
     void Start()
     {
-        LoadLastSavedExchangeRate();
-
-        SetMainCurrency(PlayerPrefs.GetString("MainCurrencyCode", "USD"));
-
         StartCoroutine(GetExchangeRate());
     }
 

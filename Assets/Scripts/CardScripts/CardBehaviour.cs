@@ -88,8 +88,18 @@ public class CardBehaviour : MonoBehaviour
     private void Card_OnCardDelete(object sender, EventArgs e)
     {
         // If card is first it sets on th main card
-        if(Card.CardList.Count > 0)
+        if(Card.CardList.Count - 1 >= CardId)
         {
+            CardName = Card.CardList[CardId][0];
+            CardBalance = Card.CardList[CardId][1];
+            CardCurrency = Card.CardList[CardId][2];
+
+            OnCardInfoSet?.Invoke(this, EventArgs.Empty);
+        }
+        else if (Card.CardList.Count - 1 < CardId && Card.CardList.Count > 0)
+        {
+            CardId = 0;
+
             CardName = Card.CardList[CardId][0];
             CardBalance = Card.CardList[CardId][1];
             CardCurrency = Card.CardList[CardId][2];

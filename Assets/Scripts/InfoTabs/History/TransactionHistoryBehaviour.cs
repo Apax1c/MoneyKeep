@@ -6,7 +6,7 @@ public class TransactionHistoryBehaviour : MonoBehaviour
     [SerializeField] private Transform content;
 
     // Start is called before the first frame update
-    void Start()
+    void Update()
     {
         UpdateContentSize();
     }
