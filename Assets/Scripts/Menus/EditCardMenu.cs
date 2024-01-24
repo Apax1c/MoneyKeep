@@ -30,8 +30,6 @@ public class EditCardMenu : MonoBehaviour
     [SerializeField] private TMP_InputField cardBalanceInput;
 
     [Header("Confirm Button")]
-    [SerializeField] private TextMeshProUGUI ConfirmText;
-    [SerializeField] private Transform ConfirmIcon;
     [SerializeField] private Button confirmButton;
 
     [Space]
@@ -62,8 +60,6 @@ public class EditCardMenu : MonoBehaviour
 
     private void Update()
     {
-        ConfirmIcon.localPosition = new Vector3((ConfirmText.preferredWidth / 2) + 12.4f - 21f + 13.3f / 2, 0, 0);
-
         EditCardNameInputAC.SetBool(IS_NAME_SET, isNameSet);
         EditCardBalanceInputAC.SetBool(IS_BALANCE_SET, isBalanceSet);
         EditCardPreviewAC.SetBool(IS_NAME_SET, isNameSet);

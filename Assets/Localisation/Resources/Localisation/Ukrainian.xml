@@ -1,0 +1,11 @@
+<document>
+	<string name="TotalBalance">Загальний баланс</string>
+	<string name="Spendings">Витрати</string>
+	<string name="Spending">Витрата</string>
+	<string name="Profits">Прибутки</string>
+	<string name="Profit">Прибуток</string>
+	<string name="History">Історія</string>
+	<string name="Categories">Категорії</string>
+	<string name="Goals">Цілі</string>
+	<string name="AddGoal">Додати ціль</string>
+</document>

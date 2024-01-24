@@ -24,8 +24,6 @@ public class NewCardMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CardBalanceText;
 
     [Header("Confirm Button")]
-    [SerializeField] private TextMeshProUGUI ConfirmText;
-    [SerializeField] private Transform ConfirmIcon;
     [SerializeField] private Button confirmButton;
 
     private string cardCurrency;
@@ -50,8 +48,6 @@ public class NewCardMenu : MonoBehaviour
 
     private void Update()
     {
-        ConfirmIcon.localPosition = new Vector3((ConfirmText.preferredWidth / 2) + 12.4f - 21f + 13.3f/2, 0, 0);
-
         NewCardNameInputAC.SetBool(IS_NAME_SET, isNameSet);
         NewCardBalanceInputAC.SetBool(IS_BALANCE_SET, isBalanceSet);
         NewCardPreviewAC.SetBool(IS_NAME_SET, isNameSet);

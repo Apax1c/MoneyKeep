@@ -1,0 +1,11 @@
+<document>
+	<string name="TotalBalance">Total balance</string>
+	<string name="Spendings">Spendings</string>
+	<string name="Spending">Spending</string>
+	<string name="Profits">Profits</string>
+	<string name="Profit">Profit</string>
+	<string name="History">History</string>
+	<string name="Categories">Categories</string>
+	<string name="Goals">Goals</string>
+	<string name="AddGoal">Add Goal</string>
+</document>
