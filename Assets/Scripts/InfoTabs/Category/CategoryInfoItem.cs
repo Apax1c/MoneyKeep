@@ -34,7 +34,7 @@ public class CategoryInfoItem : MonoBehaviour
     {
         categoryId = data.id;
 
-        categoryNameText.text = data.categoryName;
+        categoryNameText.text = Localisation.GetString(data.categoryName, this);
         differenceSumText.text = TextColors.ApplyColorToText(data.categoryIconColor, GetCategorySumm(data.categoryName));
 
         backgroundImage.color = data.categoryColor;

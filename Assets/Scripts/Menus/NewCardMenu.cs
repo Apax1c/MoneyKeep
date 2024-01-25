@@ -33,8 +33,6 @@ public class NewCardMenu : MonoBehaviour
     private bool isNameSet = false;
     private bool isBalanceSet = true;
 
-    private string wrongBalanceWarning = "¬вед≥ть числове значенн€";
-
     private void Awake()
     {
         newCardMenuAnimator = GetComponent<Animator>();
@@ -110,7 +108,7 @@ public class NewCardMenu : MonoBehaviour
         }
         else
         {
-            this.cardBalance = wrongBalanceWarning;
+            this.cardBalance = Localisation.GetString("EnterNumericValue", this);
 
             isBalanceSet = false;
         }

@@ -71,7 +71,7 @@ public class TransactionMenus : MonoBehaviour
 
     public void UpdateChoosenCardInfo()
     {
-        ChooseCardName.text = PlayerPrefs.GetString(Card.CARD_NAME + chooseCardId.ToString(), "Картка Універсальна");
+        ChooseCardName.text = PlayerPrefs.GetString(Card.CARD_NAME + chooseCardId.ToString(), Localisation.GetString("DefaultCardName", this));
         ChooseCardBalance.text = "<color=#5EDEA9>" + PlayerPrefs.GetString(Card.CARD_CURRENCY + chooseCardId.ToString(), "$") + "</color>" +
             "<color=#F6F6F6>" + PlayerPrefs.GetString(Card.CARD_BALANCE + chooseCardId.ToString(), "0.00");
         CurrencyText.text = "<color=#5EDEA9>" + PlayerPrefs.GetString(Card.CARD_CURRENCY + chooseCardId.ToString(), "$");

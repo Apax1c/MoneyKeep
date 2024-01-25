@@ -104,7 +104,7 @@ public class SpendingMenu : TransactionMenus
         newItemGO.transform.SetSiblingIndex(1);
         TransactionHistoryItem newItem = newItemGO.GetComponent<TransactionHistoryItem>();
         newItem.TransactionHistory(
-            categoryDataSource.lsItems[categoryId].categoryName + transactionComment,
+            Localisation.GetString(categoryDataSource.lsItems[categoryId].categoryName, this) + transactionComment,
             ChooseCardName.text,
             TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Red, "-" + InputText.text),
             categoryDataSource.lsItems[categoryId].categoryIcon,
@@ -152,7 +152,7 @@ public class SpendingMenu : TransactionMenus
         categoryPreviewBackground.color = categoryDataSource.lsItems[categoryId].categoryColor;
         categoryPreviewIcon.sprite = categoryDataSource.lsItems[categoryId].categoryIcon;
         categoryPreviewIcon.color = categoryDataSource.lsItems[categoryId].categoryIconColor;
-        categoryPreviewName.text = categoryDataSource.lsItems[categoryId].categoryName;
+        categoryPreviewName.text = Localisation.GetString(categoryDataSource.lsItems[categoryId].categoryName, this);
         categoryPreviewName.color = categoryDataSource.lsItems[categoryId].categoryIconColor;
 
         if (comment != null)

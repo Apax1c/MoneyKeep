@@ -42,8 +42,6 @@ public class EditCardMenu : MonoBehaviour
     private bool isNameSet = false;
     private bool isBalanceSet = true;
 
-    private string wrongBalanceWarning = "Введіть числове значення";
-
     public event EventHandler OnBalanceUpdate;
 
     private void Awake()
@@ -122,7 +120,7 @@ public class EditCardMenu : MonoBehaviour
         }
         else
         {
-            this.cardBalance = wrongBalanceWarning;
+            this.cardBalance = Localisation.GetString("EnterNumericValue", this);
 
             isBalanceSet = false;
         }
@@ -169,8 +167,8 @@ public class EditCardMenu : MonoBehaviour
 
         cardCurrency = PlayerPrefs.GetString(Card.CARD_CURRENCY + cardBehaviour.CardId, "$");
 
-        SetCardName(PlayerPrefs.GetString(Card.CARD_NAME + cardBehaviour.CardId, "Картка Універсальна"));
-        cardNameInput.text = PlayerPrefs.GetString(Card.CARD_NAME + cardBehaviour.CardId, "Картка Універсальна");
+        SetCardName(PlayerPrefs.GetString(Card.CARD_NAME + cardBehaviour.CardId, Localisation.GetString("DefaultCardName", this)));
+        cardNameInput.text = PlayerPrefs.GetString(Card.CARD_NAME + cardBehaviour.CardId, Localisation.GetString("DefaultCardName", this));
 
         SetCardBalance(PlayerPrefs.GetString(Card.CARD_BALANCE + cardBehaviour.CardId, "0.00"));
         cardBalanceInput.text = PlayerPrefs.GetString(Card.CARD_BALANCE + cardBehaviour.CardId, "0.00");

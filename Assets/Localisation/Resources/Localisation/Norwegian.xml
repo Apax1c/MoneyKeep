@@ -1,0 +1,36 @@
+<document>
+	<string name="TotalBalance">Total saldo</string>
+	<string name="Spendings">Utgifter</string>
+	<string name="Spending">Utgift</string>
+	<string name="Profits">Inntekter</string>
+	<string name="Profit">Inntekt</string>
+	<string name="History">Historikk</string>
+	<string name="Categories">Kategorier</string>
+	<string name="Goals">Mål</string>
+	<string name="AddGoal">Legg til mål</string>
+	<string name="AddSpending">Legg til utgift</string>
+	<string name="Confirm">Bekreft</string>
+	<string name="ChooseAccount">Velg konto</string>
+	<string name="ChooseCategory">Velg kategori</string>
+	<string name="Comment">Kommentar</string>
+	<string name="AddProfit">Legg til inntekt</string>
+	<string name="AddAccount">Legg til konto</string>
+	<string name="AccountName">Kontonavn</string>
+	<string name="AccountName...">Kontonavn...</string>
+	<string name="InitialAmount...">Startbeløp...</string>
+	<string name="EnterNumericValue">Skriv inn en numerisk verdi</string>
+	<string name="EditAccount">Rediger konto</string>
+	<string name="ConvertWarranty">*Ved valutaendring vil ikke saldoen bli konvertert til den valgte valutaen</string>
+	<string name="Products">Produkter</string>
+	<string name="Medicine">Medisin</string>
+	<string name="Entertainment">Underholdning</string>
+	<string name="Clothes">Klær</string>
+	<string name="MobileTopUp">Mobil påfyll</string>
+	<string name="Charity">Veldedighet</string>
+	<string name="Salary">Lønn</string>
+	<string name="Scholarship">Stipend</string>
+	<string name="Today">I dag:</string>
+	<string name="Week">Uke:</string>
+	<string name="Month">Måned:</string>
+	<string name="DefaultCardName">Standardkort</string>
+</document>

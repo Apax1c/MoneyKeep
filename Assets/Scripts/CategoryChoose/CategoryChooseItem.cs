@@ -36,7 +36,7 @@ public class CategoryChooseItem : MonoBehaviour
     {
         categoryId = data.id;
 
-        categoryNameText.text = data.categoryName;
+        categoryNameText.text = Localisation.GetString(data.categoryName, this);
         backgroundImage.color = data.categoryColor;
         iconImage.sprite = data.categoryIcon;
         iconImage.color = data.categoryIconColor;

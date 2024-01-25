@@ -1,0 +1,36 @@
+<document>
+	<string name="TotalBalance">Saldo totale</string>
+	<string name="Spendings">Spese</string>
+	<string name="Spending">Spesa</string>
+	<string name="Profits">Profitti</string>
+	<string name="Profit">Profitto</string>
+	<string name="History">Cronologia</string>
+	<string name="Categories">Categorie</string>
+	<string name="Goals">Obiettivi</string>
+	<string name="AddGoal">Aggiungi obiettivo</string>
+	<string name="AddSpending">Aggiungi spesa</string>
+	<string name="Confirm">Conferma</string>
+	<string name="ChooseAccount">Scegli conto</string>
+	<string name="ChooseCategory">Scegli categoria</string>
+	<string name="Comment">Commento</string>
+	<string name="AddProfit">Aggiungi profitto</string>
+	<string name="AddAccount">Aggiungi conto</string>
+	<string name="AccountName">Nome del conto</string>
+	<string name="AccountName...">Nome del conto...</string>
+	<string name="InitialAmount...">Importo iniziale...</string>
+	<string name="EnterNumericValue">Inserisci un valore numerico</string>
+	<string name="EditAccount">Modifica conto</string>
+	<string name="ConvertWarranty">*Quando si cambia la valuta, il saldo non sarà convertito nella valuta selezionata</string>
+	<string name="Products">Prodotti</string>
+	<string name="Medicine">Medicina</string>
+	<string name="Entertainment">Intrattenimento</string>
+	<string name="Clothes">Vestiti</string>
+	<string name="MobileTopUp">Ricarica cellulare</string>
+	<string name="Charity">Beneficenza</string>
+	<string name="Salary">Stipendio</string>
+	<string name="Scholarship">Borsa di studio</string>
+	<string name="Today">Oggi:</string>
+	<string name="Week">Settimana:</string>
+	<string name="Month">Mese:</string>
+	<string name="DefaultCardName">Carta predefinita</string>
+</document>

@@ -17,9 +17,9 @@ MonoBehaviour:
     categoryColor: {r: 0.8627451, g: 0.9372549, b: 0.78431374, a: 1}
     categoryIconColor: {r: 0.65882355, g: 0.8, b: 0.5176471, a: 1}
     categoryIcon: {fileID: 3286163911610860551, guid: 6261478b6068a674db010de890ef726c, type: 3}
-    categoryName: "\u0417\u0430\u0440\u043F\u043B\u0430\u0442\u0430"
+    categoryName: Salary
   - id: 1
     categoryColor: {r: 0.8156863, g: 0.9411765, b: 0.8666667, a: 1}
     categoryIconColor: {r: 0.5882353, g: 0.79607844, b: 0.6666667, a: 1}
     categoryIcon: {fileID: 3286163911610860551, guid: 2551f60449d5c994abcd7d61fa6f8f17, type: 3}
-    categoryName: "\u0421\u0442\u0438\u043F\u0435\u043D\u0434\u0456\u044F"
+    categoryName: Scholarship

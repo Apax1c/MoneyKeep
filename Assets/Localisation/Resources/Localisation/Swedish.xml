@@ -1,0 +1,36 @@
+<document>
+	<string name="TotalBalance">Totalt saldo</string>
+	<string name="Spendings">Utgifter</string>
+	<string name="Spending">Utgift</string>
+	<string name="Profits">Intäkter</string>
+	<string name="Profit">Intäkt</string>
+	<string name="History">Historik</string>
+	<string name="Categories">Kategorier</string>
+	<string name="Goals">Mål</string>
+	<string name="AddGoal">Lägg till mål</string>
+	<string name="AddSpending">Lägg till utgift</string>
+	<string name="Confirm">Bekräfta</string>
+	<string name="ChooseAccount">Välj konto</string>
+	<string name="ChooseCategory">Välj kategori</string>
+	<string name="Comment">Kommentar</string>
+	<string name="AddProfit">Lägg till intäkt</string>
+	<string name="AddAccount">Lägg till konto</string>
+	<string name="AccountName">Kontonamn</string>
+	<string name="AccountName...">Kontonamn...</string>
+	<string name="InitialAmount...">Startbelopp...</string>
+	<string name="EnterNumericValue">Ange ett numeriskt värde</string>
+	<string name="EditAccount">Redigera konto</string>
+	<string name="ConvertWarranty">*Vid valutabyte kommer inte saldot att konverteras till den valda valutan</string>
+	<string name="Products">Produkter</string>
+	<string name="Medicine">Medicin</string>
+	<string name="Entertainment">Nöje</string>
+	<string name="Clothes">Kläder</string>
+	<string name="MobileTopUp">Mobil påfyllning</string>
+	<string name="Charity">Välgörenhet</string>
+	<string name="Salary">Lön</string>
+	<string name="Scholarship">Stipendium</string>
+	<string name="Today">Idag:</string>
+	<string name="Week">Vecka:</string>
+	<string name="Month">Månad:</string>
+	<string name="DefaultCardName">Standardkort</string>
+</document>

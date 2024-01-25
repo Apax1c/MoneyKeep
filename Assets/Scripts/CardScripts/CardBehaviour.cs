@@ -18,7 +18,7 @@ public class CardBehaviour : MonoBehaviour
         CardId = 0;
 
         // Set info of Main card
-        CardName = PlayerPrefs.GetString("CardName0", "Картка Універсальна");
+        CardName = PlayerPrefs.GetString("CardName0", Localisation.GetString("DefaultCardName", this));
         CardBalance = PlayerPrefs.GetString("CardBalance0", "0.00");
         CardCurrency = PlayerPrefs.GetString("CardCurrency0", "$");
     }
@@ -108,7 +108,7 @@ public class CardBehaviour : MonoBehaviour
         }
         else
         {
-            CardName = PlayerPrefs.GetString("CardName0", "Картка Універсальна");
+            CardName = PlayerPrefs.GetString("CardName0", Localisation.GetString("DefaultCardName", this));
             CardBalance = PlayerPrefs.GetString("CardBalance0", "0.00");
             CardCurrency = PlayerPrefs.GetString("CardCurrency0", "$");
 

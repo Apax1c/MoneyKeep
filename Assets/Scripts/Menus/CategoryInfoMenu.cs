@@ -85,7 +85,7 @@ public class CategoryInfoMenu : MonoBehaviour
         categoryInfoMenuAnimator.SetBool(IS_MENU_TOGGLED, isMenuToggled);
 
         currentCategoryId = categoryId;
-        categoryNameText.text = spendingsDataSource.lsItems[categoryId].categoryName;
+        categoryNameText.text = Localisation.GetString(spendingsDataSource.lsItems[categoryId].categoryName, this);
 
         mainColor = spendingsDataSource.lsItems[categoryId].categoryIconColor;
 
@@ -105,9 +105,9 @@ public class CategoryInfoMenu : MonoBehaviour
         weeklyBarImage.color = monthColor;
         monthlyBarImage.color = monthColor;
 
-        dailyText.text = TextColors.ApplyColorToText(mainColor, "ׁüמדמהם³:");
-        weeklyText.text = TextColors.ApplyColorToText(mainColor, "ׂטזהוםü:");
-        monthlyText.text = TextColors.ApplyColorToText(mainColor, "ּ³סÿצü:");
+        dailyText.text = TextColors.ApplyColorToText(mainColor, Localisation.GetString("Today", this));
+        weeklyText.text = TextColors.ApplyColorToText(mainColor, Localisation.GetString("Week", this));
+        monthlyText.text = TextColors.ApplyColorToText(mainColor, Localisation.GetString("Month", this));
 
         SetCategoryId(categoryId);
     }
@@ -127,7 +127,7 @@ public class CategoryInfoMenu : MonoBehaviour
     public void SetCategoryId(int categoryId)
     {
         string categoryName = spendingsDataSource.lsItems[categoryId].categoryName;
-        categoryNameText.text = categoryName;
+        categoryNameText.text = Localisation.GetString(categoryName, this);
 
         LoadDailySpendings();
         LoadWeeklySpendings(); 

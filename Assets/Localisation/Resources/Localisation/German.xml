@@ -1,0 +1,36 @@
+<document>
+	<string name="TotalBalance">Gesamtsaldo</string>
+	<string name="Spendings">Ausgaben</string>
+	<string name="Spending">Ausgabe</string>
+	<string name="Profits">Einnahmen</string>
+	<string name="Profit">Einnahme</string>
+	<string name="History">Verlauf</string>
+	<string name="Categories">Kategorien</string>
+	<string name="Goals">Ziele</string>
+	<string name="AddGoal">Ziel hinzufügen</string>
+	<string name="AddSpending">Ausgabe hinzufügen</string>
+	<string name="Confirm">Bestätigen</string>
+	<string name="ChooseAccount">Konto wählen</string>
+	<string name="ChooseCategory">Kategorie wählen</string>
+	<string name="Comment">Kommentar</string>
+	<string name="AddProfit">Einnahme hinzufügen</string>
+	<string name="AddAccount">Konto hinzufügen</string>
+	<string name="AccountName">Kontoname</string>
+	<string name="AccountName...">Kontoname...</string>
+	<string name="InitialAmount...">Anfangsbetrag...</string>
+	<string name="EnterNumericValue">Geben Sie einen numerischen Wert ein</string>
+	<string name="EditAccount">Konto bearbeiten</string>
+	<string name="ConvertWarranty">*Bei Währungswechsel wird das Guthaben nicht in die ausgewählte Währung umgerechnet</string>
+	<string name="Products">Produkte</string>
+	<string name="Medicine">Medizin</string>
+	<string name="Entertainment">Unterhaltung</string>
+	<string name="Clothes">Kleidung</string>
+	<string name="MobileTopUp">Handyaufladung</string>
+	<string name="Charity">Wohltätigkeit</string>
+	<string name="Salary">Gehalt</string>
+	<string name="Scholarship">Stipendium</string>
+	<string name="Today">Heute:</string>
+	<string name="Week">Woche:</string>
+	<string name="Month">Monat:</string>
+	<string name="DefaultCardName">Standardkarte</string>
+</document>

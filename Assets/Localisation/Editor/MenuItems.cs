@@ -55,6 +55,16 @@ public class MenuItems
 	{
 		EditorPrefs.SetString("TestLanguage","Polish");
     }
+	[MenuItem("Localisation/Norwegian", false,23)]
+	private static void SetLanguageNN()
+	{
+		EditorPrefs.SetString("TestLanguage", "Norwegian");
+    }
+	[MenuItem("Localisation/Swedish", false,23)]
+	private static void SetLanguageSW()
+	{
+		EditorPrefs.SetString("TestLanguage", "Swedish");
+    }
 	[MenuItem("Localisation/Chinese",false,34)]
 	private static void SetLanguageCN()
 	{

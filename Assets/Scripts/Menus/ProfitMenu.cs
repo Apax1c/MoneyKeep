@@ -150,7 +150,7 @@ public class ProfitMenu : TransactionMenus
         categoryPreviewBackground.color = categoryDataSource.lsItems[categoryId].categoryColor;
         categoryPreviewIcon.sprite = categoryDataSource.lsItems[categoryId].categoryIcon;
         categoryPreviewIcon.color = categoryDataSource.lsItems[categoryId].categoryIconColor;
-        categoryPreviewName.text = categoryDataSource.lsItems[categoryId].categoryName;
+        categoryPreviewName.text = Localisation.GetString(categoryDataSource.lsItems[categoryId].categoryName, this);
         categoryPreviewName.color = categoryDataSource.lsItems[categoryId].categoryIconColor;
 
         if (comment != null)
