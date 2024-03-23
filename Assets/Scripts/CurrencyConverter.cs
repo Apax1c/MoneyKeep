@@ -65,6 +65,8 @@ public class CurrencyConverter : MonoBehaviour
 
     public IEnumerator GetExchangeRate()
     {
+        SetMainCurrency(PlayerPrefs.GetString("MainCurrencyCode", "USD"));
+
         UnityWebRequest request = UnityWebRequest.Get(apiUrl);
         yield return request.SendWebRequest();
 

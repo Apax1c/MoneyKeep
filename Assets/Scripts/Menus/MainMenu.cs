@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -72,21 +73,35 @@ public class MainMenu : MonoBehaviour
 
     private void SetTotalCardBalance()
     {
-        totalBalance = 0;
+        totalBalance = 0f;
 
         Card.LoadCardList();
 
         foreach (string[] card in Card.CardList)
         {
-            totalBalance += CurrencyConverter.instance.GetConvertedValue(float.Parse(card[balanceIdInList].Replace(".", ",")), card[3]);
+            var culture = System.Globalization.CultureInfo.CurrentCulture;
+            var decimalSeparator = culture.NumberFormat.NumberDecimalSeparator;
+
+            // Підготовка рядка для конвертації
+            string preparedBalance = decimalSeparator == "," ? card[balanceIdInList].Replace(".", ",") : card[balanceIdInList].Replace(",", ".");
+
+            if (float.TryParse(preparedBalance, NumberStyles.Any, culture, out float cardBalance))
+            {
+                totalBalance += CurrencyConverter.instance.GetConvertedValue(cardBalance, card[3]);
+            }
         }
 
-        double doubleVal = Convert.ToDouble(totalBalance);
-        doubleVal = Math.Round(doubleVal, 2);
-        string cardBalance = doubleVal.ToString();
+        // Округлення до двох знаків після коми
+        totalBalance = (float)Math.Round(totalBalance, 2);
 
-        totalBalanceText.text = TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, mainCurrency) + TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Black, cardBalance);
+        // Форматування рядка балансу
+        string cardBalanceText = totalBalance.ToString("F2", CultureInfo.CurrentCulture);
+
+        totalBalanceText.text = TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, mainCurrency) +
+                                TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Black, cardBalanceText);
     }
+
+
 
     private void SetMonthSpendings()
     {
@@ -95,34 +110,29 @@ public class MainMenu : MonoBehaviour
         float summ = 0f;
         if (transactionsList == null)
         {
-            spendingsText.text = summ.ToString();
+            spendingsText.text = mainCurrency + "0.00";
+            return;
         }
-        else
+
+        foreach (TransactionData transactionData in transactionsList)
         {
-            foreach (TransactionData transactionData in transactionsList)
+            if (transactionData.transactionSum.Contains("-"))
             {
-                if (transactionData.transactionSum.Contains("-"))
+                int indexMinus = transactionData.transactionSum.IndexOf('-');
+
+                string trimmedString = indexMinus != -1 ? transactionData.transactionSum.Substring(indexMinus + 1) : transactionData.transactionSum;
+                if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
                 {
-                    int indexMinus = transactionData.transactionSum.IndexOf('-');
-
-                    // Find the earliest occurrence of either '+' or '-'
-                    int cutIndex = -1;
-                    if (indexMinus != -1)
-                    {
-                        cutIndex = indexMinus;
-                    }
-                    string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
-
-                    summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
+                    summ += CurrencyConverter.instance.GetConvertedValue(parsedValue, transactionData.currencyCode);
                 }
             }
-
-            double doubleVal = Convert.ToDouble(summ);
-            doubleVal = Math.Round(doubleVal, 2);
-
-            spendingsText.text = mainCurrency + doubleVal.ToString().Replace(",", ".");
         }
+
+        double doubleVal = Math.Round(Convert.ToDouble(summ), 2);
+
+        spendingsText.text = mainCurrency + doubleVal.ToString("F2").Replace(",", ".");
     }
+
 
     private void SetMonthProfit()
     {
@@ -131,34 +141,28 @@ public class MainMenu : MonoBehaviour
         float summ = 0f;
         if (transactionsList == null)
         {
-            profitText.text = summ.ToString();
+            profitText.text = "0.00";
+            return;
         }
-        else
+
+        foreach (TransactionData transactionData in transactionsList)
         {
-            foreach (TransactionData transactionData in transactionsList)
+            if (transactionData.transactionSum.Contains("+"))
             {
-                if (transactionData.transactionSum.Contains("+"))
+                int indexPlus = transactionData.transactionSum.IndexOf('+');
+
+                string trimmedString = indexPlus != -1 ? transactionData.transactionSum.Substring(indexPlus + 1) : transactionData.transactionSum;
+                if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
                 {
-                    int indexPlus = transactionData.transactionSum.IndexOf('+');
-
-                    // Find the earliest occurrence of either '+' or '-'
-                    int cutIndex = -1;
-                    if (indexPlus != -1)
-                    {
-                        cutIndex = indexPlus;
-                    }
-                    string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
-
-                    summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
+                    summ += CurrencyConverter.instance.GetConvertedValue(parsedValue, transactionData.currencyCode);
                 }
             }
-
-            double doubleVal = Convert.ToDouble(summ);
-            doubleVal = Math.Round(doubleVal, 2);
-
-            profitText.text = mainCurrency + doubleVal.ToString().Replace(",", ".");
         }
+
+        double doubleVal = Math.Round(Convert.ToDouble(summ), 2);
+        profitText.text = mainCurrency + doubleVal.ToString("F2").Replace(",", ".");
     }
+
 
     private void OnDisable()
     {

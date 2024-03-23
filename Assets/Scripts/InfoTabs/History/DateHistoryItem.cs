@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -57,45 +58,43 @@ public class DateHistoryItem : MonoBehaviour
         float difference = 0f;
 
         List<TransactionData> list = DataManager.Instance.GetHistory();
-        if (list == null) 
+        if (list == null)
             return 0;
 
         foreach (TransactionData item in list)
         {
-            if (item.transactionName != categoryName)
+            if (item.transactionName != categoryName || item.date != date)
                 continue;
 
-            if (item.date == date)
+            int indexPlus = item.transactionSum.IndexOf('+');
+            int indexMinus = item.transactionSum.IndexOf('-');
+
+            // Find the earliest occurrence of either '+' or '-'
+            int cutIndex = -1;
+            if (indexPlus != -1 && indexMinus != -1)
             {
-                int indexPlus = item.transactionSum.IndexOf('+');
-                int indexMinus = item.transactionSum.IndexOf('-');
+                cutIndex = Math.Min(indexPlus, indexMinus);
+            }
+            else if (indexPlus != -1)
+            {
+                cutIndex = indexPlus;
+            }
+            else if (indexMinus != -1)
+            {
+                cutIndex = indexMinus;
+            }
 
-                // Find the earliest occurrence of either '+' or '-'
-                int cutIndex = -1;
-                if (indexPlus != -1 && indexMinus != -1)
-                {
-                    cutIndex = Math.Min(indexPlus, indexMinus);
-                }
-                else if (indexPlus != -1)
-                {
-                    cutIndex = indexPlus;
-                }
-                else if (indexMinus != -1)
-                {
-                    cutIndex = indexMinus;
-                }
+            string trimmedString = cutIndex != -1 ? item.transactionSum.Substring(cutIndex) : item.transactionSum;
 
-                string trimmedString = cutIndex != -1 ? item.transactionSum.Substring(cutIndex) : item.transactionSum;
-
-                difference += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), item.currencyCode);
+            // Use InvariantCulture to ensure the decimal point is correctly interpreted
+            if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
+            {
+                difference += CurrencyConverter.instance.GetConvertedValue(parsedValue, item.currencyCode);
             }
         }
 
-        double doubleVal = Convert.ToDouble(difference);
-        doubleVal = Math.Round(doubleVal, 2);
-
-
-        return doubleVal;
+        // Convert to double for the return type
+        return Math.Round(Convert.ToDouble(difference), 2);
     }
 
     private double GetDifference(string date)
@@ -114,32 +113,20 @@ public class DateHistoryItem : MonoBehaviour
                 int indexMinus = item.transactionSum.IndexOf('-');
 
                 // Find the earliest occurrence of either '+' or '-'
-                int cutIndex = -1;
-                if (indexPlus != -1 && indexMinus != -1)
-                {
-                    cutIndex = Math.Min(indexPlus, indexMinus);
-                }
-                else if (indexPlus != -1)
-                {
-                    cutIndex = indexPlus;
-                }
-                else if (indexMinus != -1)
-                {
-                    cutIndex = indexMinus;
-                }
+                int cutIndex = indexPlus != -1 ? indexPlus : indexMinus;
 
                 string trimmedString = cutIndex != -1 ? item.transactionSum.Substring(cutIndex) : item.transactionSum;
 
-                difference += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), item.currencyCode);
+                if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
+                {
+                    difference += CurrencyConverter.instance.GetConvertedValue(parsedValue, item.currencyCode);
+                }
             }
         }
 
-        double doubleVal = Convert.ToDouble(difference);
-        doubleVal = Math.Round(doubleVal, 2);
-
-
-        return doubleVal;
+        return Math.Round(difference, 2);
     }
+
 
     private void SpendingMenu_OnBalanceUpdate(object sender, EventArgs e)
     {

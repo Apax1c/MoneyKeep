@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Transactions;
 using TMPro;
 using Unity.VectorGraphics;
@@ -169,40 +170,36 @@ public class CategoryInfoMenu : MonoBehaviour
         float summ = 0f;
         if (transactionsList == null)
         {
-            dailySumText.text = summ.ToString();
+            dailySumText.text = "0.00";
+            return;
         }
-        else
+
+        foreach (TransactionData transactionData in transactionsList)
         {
-            foreach (TransactionData transactionData in transactionsList)
+            if (!transactionData.transactionName.Contains(categoryNameText.text))
+                continue;
+
+            if (transactionData.date.Contains(currentDate.ToString("dd.MM.yy")))
             {
-                if (!transactionData.transactionName.Contains(categoryNameText.text))
-                    continue;
+                int indexMinus = transactionData.transactionSum.IndexOf('-');
 
-                if (transactionData.date.Contains(currentDate.ToString("dd.MM.yy")))
+                string trimmedString = indexMinus != -1 ? transactionData.transactionSum.Substring(indexMinus + 1) : transactionData.transactionSum;
+                if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
                 {
-                    int indexMinus = transactionData.transactionSum.IndexOf('-');
-
-                    // Find the earliest occurrence of either '+' or '-'
-                    int cutIndex = -1;
-                    if (indexMinus != -1)
-                    {
-                        cutIndex = indexMinus;
-                    }
-                    string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
-                    summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
-
+                    summ += CurrencyConverter.instance.GetConvertedValue(parsedValue, transactionData.currencyCode);
                 }
             }
-
-            dailySum = summ;
-
-            double doubleVal = Convert.ToDouble(summ);
-            doubleVal = Math.Round(doubleVal, 2);
-
-            dailySumText.text = TextColors.ApplyColorToText(spendingsDataSource.lsItems[currentCategoryId].categoryIconColor, mainCurrency) + "</color>" + doubleVal.ToString().Replace(",", ".");
         }
+
+        dailySum = summ;
+        double doubleVal = Math.Round(Convert.ToDouble(summ), 2);
+
+        // Assuming spendingsDataSource.lsItems[currentCategoryId].categoryIconColor returns a color code
+        Color colorCode = spendingsDataSource.lsItems[currentCategoryId].categoryIconColor;
+        dailySumText.text = TextColors.ApplyColorToText(colorCode, mainCurrency) + "</color>" + doubleVal.ToString("F2").Replace(",", ".");
     }
-    
+
+
     private void LoadWeeklySpendings()
     {
         DateTime currentDate = DateTime.Now;
@@ -211,44 +208,40 @@ public class CategoryInfoMenu : MonoBehaviour
         float summ = 0f;
         if (transactionsList == null)
         {
-            weeklySumText.text = summ.ToString();
+            weeklySumText.text = "0.00";
+            return;
         }
-        else
-        {
-            foreach (TransactionData transactionData in transactionsList)
-            {
-                if (!transactionData.transactionName.Contains(categoryNameText.text))
-                    continue;
 
-                if (transactionData.date.Contains(currentDate.ToString("dd.MM.yy")) ||
-                    transactionData.date.Contains(currentDate.AddDays(-1).ToString("dd.MM.yy")) ||
-                    transactionData.date.Contains(currentDate.AddDays(-2).ToString("dd.MM.yy")) ||
-                    transactionData.date.Contains(currentDate.AddDays(-3).ToString("dd.MM.yy")) ||
-                    transactionData.date.Contains(currentDate.AddDays(-4).ToString("dd.MM.yy")) ||
-                    transactionData.date.Contains(currentDate.AddDays(-5).ToString("dd.MM.yy")) ||
-                    transactionData.date.Contains(currentDate.AddDays(-6).ToString("dd.MM.yy")))
+        DateTime weekStart = currentDate.AddDays(-6); // Отримати дату початку тижня
+
+        foreach (TransactionData transactionData in transactionsList)
+        {
+            if (!transactionData.transactionName.Contains(categoryNameText.text))
+                continue;
+
+            DateTime transactionDate;
+            if (DateTime.TryParseExact(transactionData.date, "dd.MM.yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out transactionDate))
+            {
+                if (transactionDate >= weekStart && transactionDate <= currentDate)
                 {
                     int indexMinus = transactionData.transactionSum.IndexOf('-');
 
-                    // Find the earliest occurrence of either '+' or '-'
-                    int cutIndex = -1;
-                    if (indexMinus != -1)
+                    string trimmedString = indexMinus != -1 ? transactionData.transactionSum.Substring(indexMinus + 1) : transactionData.transactionSum;
+                    if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
                     {
-                        cutIndex = indexMinus;
+                        summ += CurrencyConverter.instance.GetConvertedValue(parsedValue, transactionData.currencyCode);
                     }
-                    string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
-                    summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
                 }
             }
-
-            weeklySum = summ;
-
-            double doubleVal = Convert.ToDouble(summ);
-            doubleVal = Math.Round(doubleVal, 2);
-
-            weeklySumText.text = TextColors.ApplyColorToText(spendingsDataSource.lsItems[currentCategoryId].categoryIconColor, mainCurrency) + "</color>" + doubleVal.ToString().Replace(",", ".");
         }
+
+        weeklySum = summ;
+        double doubleVal = Math.Round(Convert.ToDouble(summ), 2);
+
+        Color colorCode = spendingsDataSource.lsItems[currentCategoryId].categoryIconColor;
+        weeklySumText.text = TextColors.ApplyColorToText(colorCode, mainCurrency) + "</color>" + doubleVal.ToString("F2").Replace(",", ".");
     }
+
 
     private void LoadMonthlySpendings()
     {
@@ -258,38 +251,36 @@ public class CategoryInfoMenu : MonoBehaviour
         float summ = 0f;
         if (transactionsList == null)
         {
-            monthlySumText.text = summ.ToString();
+            monthlySumText.text = "0.00";
+            return;
         }
-        else
+
+        foreach (TransactionData transactionData in transactionsList)
         {
-            foreach (TransactionData transactionData in transactionsList)
+            if (!transactionData.transactionName.Contains(categoryNameText.text))
+                continue;
+
+            DateTime transactionDate;
+            if (DateTime.TryParseExact(transactionData.date, "dd.MM.yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out transactionDate) &&
+                transactionDate.Month == currentDate.Month && transactionDate.Year == currentDate.Year)
             {
-                if (!transactionData.transactionName.Contains(categoryNameText.text))
-                    continue;
+                int indexMinus = transactionData.transactionSum.IndexOf('-');
 
-                if (transactionData.date.Contains(currentDate.ToString("MM.yy")))
+                string trimmedString = indexMinus != -1 ? transactionData.transactionSum.Substring(indexMinus + 1) : transactionData.transactionSum;
+                if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
                 {
-                    int indexMinus = transactionData.transactionSum.IndexOf('-');
-
-                    // Find the earliest occurrence of either '+' or '-'
-                    int cutIndex = -1;
-                    if (indexMinus != -1)
-                    {
-                        cutIndex = indexMinus;
-                    }
-                    string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
-                    summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
+                    summ += CurrencyConverter.instance.GetConvertedValue(parsedValue, transactionData.currencyCode);
                 }
             }
-
-            monthlySum = summ;
-
-            double doubleVal = Convert.ToDouble(summ);
-            doubleVal = Math.Round(doubleVal, 2);
-
-            monthlySumText.text = TextColors.ApplyColorToText(spendingsDataSource.lsItems[currentCategoryId].categoryIconColor, mainCurrency) + "</color>" + doubleVal.ToString().Replace(",", ".");
         }
+
+        monthlySum = summ;
+        double doubleVal = Math.Round(Convert.ToDouble(summ), 2);
+
+        Color colorCode = spendingsDataSource.lsItems[currentCategoryId].categoryIconColor;
+        monthlySumText.text = TextColors.ApplyColorToText(colorCode, mainCurrency) + "</color>" + doubleVal.ToString("F2").Replace(",", ".");
     }
+
 
     private void LoadHistory()
     {

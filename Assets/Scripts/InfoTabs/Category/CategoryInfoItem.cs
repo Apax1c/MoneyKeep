@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using Unity.VectorGraphics;
 using UnityEngine;
@@ -45,12 +46,11 @@ public class CategoryInfoItem : MonoBehaviour
     private string GetCategorySumm(string categoryName)
     {
         List<TransactionData> transactionsList = DataManager.Instance.GetHistory();
-        
+
         float summ = 0f;
-        if(transactionsList == null)
+        if (transactionsList == null)
         {
-            
-            return mainCurrency + summ.ToString();
+            return mainCurrency + "0.00";
         }
 
         foreach (TransactionData transactionData in transactionsList)
@@ -59,21 +59,17 @@ public class CategoryInfoItem : MonoBehaviour
             {
                 int indexMinus = transactionData.transactionSum.IndexOf('-');
 
-                // Find the earliest occurrence of either '+' or '-'
-                int cutIndex = -1;
-                if (indexMinus != -1)
-                {
-                    cutIndex = indexMinus;
-                }
-                string trimmedString = cutIndex != -1 ? transactionData.transactionSum.Substring(cutIndex + 1) : transactionData.transactionSum;
+                string trimmedString = indexMinus != -1 ? transactionData.transactionSum.Substring(indexMinus + 1) : transactionData.transactionSum;
 
-                summ += CurrencyConverter.instance.GetConvertedValue(float.Parse(trimmedString.Replace(".", ",")), transactionData.currencyCode);
+                if (float.TryParse(trimmedString.Replace('.', ','), NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedValue))
+                {
+                    summ += CurrencyConverter.instance.GetConvertedValue(parsedValue, transactionData.currencyCode);
+                }
             }
         }
 
-        double doubleVal = Convert.ToDouble(summ);
-        doubleVal = Math.Round(doubleVal, 2);
-
-        return mainCurrency + doubleVal.ToString().Replace(",", ".");
+        float roundedSum = (float)Math.Round(summ, 2);
+        return mainCurrency + roundedSum.ToString("F2").Replace(",", ".");
     }
+
 }

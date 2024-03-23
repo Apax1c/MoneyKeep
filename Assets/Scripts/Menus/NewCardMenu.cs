@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,48 +75,39 @@ public class NewCardMenu : MonoBehaviour
 
     public void SetCardBalance(string cardBalance)
     {
-        // Замена точек на запятые
-        this.cardBalance = cardBalance.Replace(".", ",");
+        var culture = System.Globalization.CultureInfo.CurrentCulture;
+        var decimalSeparator = culture.NumberFormat.NumberDecimalSeparator;
 
-        if (double.TryParse(this.cardBalance, out double result))
+        // Підготовка рядка для конвертації
+        string preparedBalance = decimalSeparator == "," ? cardBalance.Replace(".", ",") : cardBalance.Replace(",", ".");
+
+        // Спроба конвертації
+        if (double.TryParse(preparedBalance, NumberStyles.Any, culture, out double result))
         {
-            this.cardBalance = result.ToString();
+            // Округлення до двох знаків після коми
+            result = Math.Round(result, 2);
 
-            // Обрезание значение до двух после запятой
-            double doubleVal = Convert.ToDouble(this.cardBalance);
-            doubleVal = Math.Round(doubleVal, 2);
-            this.cardBalance = doubleVal.ToString();
-
-            // Добавляет нули в конце, если других значений нет
-            if (!this.cardBalance.Contains(","))
-            {
-                this.cardBalance += ",00";
-            }
-            else if (this.cardBalance.Length == (this.cardBalance.IndexOf(',') + 2))
-            {
-                this.cardBalance += "0";
-            }
-
-            this.cardBalance = this.cardBalance.Replace(",", ".");
+            // Форматування рядка з числа з урахуванням локалі
+            this.cardBalance = result.ToString("F2", culture);
 
             isBalanceSet = true;
         }
-        else if (cardBalance == string.Empty)
+        else if (string.IsNullOrEmpty(cardBalance))
         {
             this.cardBalance = "0.00";
-
             isBalanceSet = true;
         }
         else
         {
             this.cardBalance = Localisation.GetString("EnterNumericValue", this);
-
             isBalanceSet = false;
         }
 
-        CardBalanceText.text = TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, cardCurrency) + " "
-            + TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.White, this.cardBalance);
+        // Припустимо, що CardBalanceText - це UI елемент, якому ми встановлюємо текст
+        CardBalanceText.text = TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.Green, cardCurrency) + " " +
+                               TextColors.ApplyColorToText(TextColors.DefaultColorsEnum.White, this.cardBalance);
     }
+
 
     public void SetCurrency(string currency)
     {
@@ -135,9 +127,19 @@ public class NewCardMenu : MonoBehaviour
 
     public void CreateNewCard()
     {
-        float CardBalanceFloat = float.Parse(cardBalance.Replace('.', ','));
+        // Замість заміни символів, краще використовувати культурні налаштування для парсингу
+        var culture = CultureInfo.InvariantCulture; // або інша культура, що використовує кому як десятковий роздільник
 
-        new Card(CardNameText.text, cardBalance, cardCurrency, CardBalanceFloat, cardCurrencyCode);
+        // Парсинг cardBalance з урахуванням культури, яка має кому як десятковий роздільник
+        if (float.TryParse(cardBalance, NumberStyles.Any, culture, out float CardBalanceFloat))
+        {
+            new Card(CardNameText.text, cardBalance, cardCurrency, CardBalanceFloat, cardCurrencyCode);
+        }
+        else
+        {
+            // Обробка помилки, якщо парсинг не вдається
+            Debug.Log("Невдале перетворення: некоректний формат числа.");
+        }
 
         ToggleNewCardMenu();
     }
